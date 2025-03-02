@@ -5,9 +5,9 @@ using System.Net;
 
 namespace CycleShopAPI.Data
 {
-    public class CycleRetailShopContext : DbContext
+    public class CycleShopContext : DbContext
     {
-        public CycleRetailShopContext(DbContextOptions<CycleRetailShopContext> options)
+        public CycleShopContext(DbContextOptions<CycleShopContext> options)
             : base(options) { }
 
         public DbSet<User> Users { get; set; }
@@ -54,7 +54,8 @@ namespace CycleShopAPI.Data
                 entity.Property(oi => oi.UnitPrice).HasColumnType("decimal(10,2)");
                 entity.Property(oi => oi.TotalPrice)
                     .HasColumnType("decimal(10,2)")
-                    .HasComputedColumnSql("\"Quantity\" * \"UnitPrice\"");
+                    .HasComputedColumnSql("\"Quantity\" * \"UnitPrice\"", stored: true);
+
             });
 
             modelBuilder.Entity<Customer>(entity =>
@@ -63,6 +64,8 @@ namespace CycleShopAPI.Data
                 entity.Property(c => c.UpdatedAt).HasDefaultValueSql("NOW()");
                 entity.HasIndex(c => c.Email).IsUnique();
             });
+
+            modelBuilder.Entity<CycleType>().HasKey(ct => ct.CycleTypeId);
 
             // Configure relationships
             modelBuilder.Entity<Order>()
@@ -111,6 +114,9 @@ namespace CycleShopAPI.Data
             modelBuilder.Entity<User>().HasQueryFilter(u => u.DeletedAt == null);
             modelBuilder.Entity<Cycle>().HasQueryFilter(c => c.DeletedAt == null);
             modelBuilder.Entity<Customer>().HasQueryFilter(c => c.DeletedAt == null);
+            modelBuilder.Entity<Order>().HasQueryFilter(o => o.Customer.DeletedAt == null);
+            modelBuilder.Entity<OrderItem>().HasQueryFilter(oi => oi.Cycle.DeletedAt == null);
+            modelBuilder.Entity<Payment>().HasQueryFilter(p => p.Order.Customer.DeletedAt == null);
 
         }
     }

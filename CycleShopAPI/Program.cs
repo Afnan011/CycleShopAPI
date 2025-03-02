@@ -1,3 +1,4 @@
+using CycleShopAPI.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace CycleShopAPI
@@ -9,8 +10,8 @@ namespace CycleShopAPI
             var builder = WebApplication.CreateBuilder(args);
 
             // Register DbContext with PostgreSQL
-            builder.Services.AddDbContext<CycleRetailShopContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddDbContext<CycleShopContext>(options =>
+                options.UseNpgsql(builder.Configuration.GetConnectionString("DevConnection")));
 
             // Add services to the container.
 

@@ -1,7 +1,6 @@
 ﻿using System;
-using CycleShopAPI.Models;
 
-namespace CycleShopAPI
+namespace CycleShopAPI.Models
 {
     public class User
     {
