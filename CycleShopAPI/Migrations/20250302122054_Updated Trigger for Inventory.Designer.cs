@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CycleShopAPI.Migrations
 {
     [DbContext(typeof(CycleShopContext))]
-    [Migration("20250302081514_Initial Create")]
-    partial class InitialCreate
+    [Migration("20250302122054_Updated Trigger for Inventory")]
+    partial class UpdatedTriggerforInventory
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -193,16 +193,10 @@ namespace CycleShopAPI.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<int>("ReorderThreshold")
-                        .HasColumnType("integer");
-
                     b.Property<string>("SKU")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
-
-                    b.Property<int>("StockQuantity")
-                        .HasColumnType("integer");
 
                     b.Property<Guid>("TypeId")
                         .HasColumnType("uuid");
@@ -246,6 +240,74 @@ namespace CycleShopAPI.Migrations
                     b.HasKey("CycleTypeId");
 
                     b.ToTable("CycleTypes");
+                });
+
+            modelBuilder.Entity("CycleShopAPI.Models.Inventory", b =>
+                {
+                    b.Property<Guid>("InventoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CycleId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("LastStockUpdate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("ReorderThreshold")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StockQuantity")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("WarehouseLocation")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("InventoryId");
+
+                    b.HasIndex("CycleId");
+
+                    b.ToTable("Inventories");
+                });
+
+            modelBuilder.Entity("CycleShopAPI.Models.InventoryHistory", b =>
+                {
+                    b.Property<Guid>("HistoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ChangeReason")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CycleId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("NewQuantity")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid?>("OrderId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("PreviousQuantity")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("HistoryId");
+
+                    b.HasIndex("CycleId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("InventoryHistories");
                 });
 
             modelBuilder.Entity("CycleShopAPI.Models.Order", b =>
@@ -339,7 +401,10 @@ namespace CycleShopAPI.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderItems");
+                    b.ToTable("OrderItems", t =>
+                        {
+                            t.HasTrigger("order_item_inventory_update");
+                        });
                 });
 
             modelBuilder.Entity("CycleShopAPI.Models.Payment", b =>
@@ -464,6 +529,40 @@ namespace CycleShopAPI.Migrations
                     b.Navigation("Brand");
 
                     b.Navigation("CycleType");
+                });
+
+            modelBuilder.Entity("CycleShopAPI.Models.Inventory", b =>
+                {
+                    b.HasOne("CycleShopAPI.Models.Cycle", "Cycle")
+                        .WithMany()
+                        .HasForeignKey("CycleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cycle");
+                });
+
+            modelBuilder.Entity("CycleShopAPI.Models.InventoryHistory", b =>
+                {
+                    b.HasOne("CycleShopAPI.Models.Cycle", "Cycle")
+                        .WithMany()
+                        .HasForeignKey("CycleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CycleShopAPI.Models.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId");
+
+                    b.HasOne("CycleShopAPI.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Cycle");
+
+                    b.Navigation("Order");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("CycleShopAPI.Models.Order", b =>

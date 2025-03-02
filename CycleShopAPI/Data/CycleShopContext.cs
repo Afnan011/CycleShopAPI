@@ -19,8 +19,9 @@ namespace CycleShopAPI.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Payment> Payments { get; set; }
+        public DbSet<Inventory> Inventories { get; set; }
+        public DbSet<InventoryHistory> InventoryHistories { get; set; }
 
-        //public DbSet<InventoryHistory> InventoryHistories { get; set; }
         //public DbSet<AuditLog> AuditLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -109,6 +110,29 @@ namespace CycleShopAPI.Data
                 .WithMany()
                 .HasForeignKey(p => p.OrderId);
 
+            // Inventory
+            modelBuilder.Entity<Inventory>(entity =>
+            {
+                entity.HasKey(i => i.InventoryId);
+                entity.HasOne(i => i.Cycle)
+                      .WithMany()
+                      .HasForeignKey(i => i.CycleId);
+            });
+
+            modelBuilder.Entity<InventoryHistory>(entity =>
+            {
+                entity.HasKey(i => i.HistoryId);
+                entity.HasOne(ih => ih.Cycle)
+                      .WithMany()
+                      .HasForeignKey(ih => ih.CycleId);
+            });
+
+            modelBuilder.Entity<OrderItem>(entity =>
+            {
+                entity.ToTable(tb => tb.HasTrigger("order_item_inventory_update"));
+            });
+
+
 
             // Soft Delete Query Filters
             modelBuilder.Entity<User>().HasQueryFilter(u => u.DeletedAt == null);
@@ -117,6 +141,9 @@ namespace CycleShopAPI.Data
             modelBuilder.Entity<Order>().HasQueryFilter(o => o.Customer.DeletedAt == null);
             modelBuilder.Entity<OrderItem>().HasQueryFilter(oi => oi.Cycle.DeletedAt == null);
             modelBuilder.Entity<Payment>().HasQueryFilter(p => p.Order.Customer.DeletedAt == null);
+            modelBuilder.Entity<Inventory>().HasQueryFilter(i => i.Cycle.DeletedAt == null);
+            modelBuilder.Entity<InventoryHistory>().HasQueryFilter(ih => ih.Cycle.DeletedAt == null);
+
 
         }
     }

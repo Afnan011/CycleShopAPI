@@ -127,8 +127,6 @@ namespace CycleShopAPI.Migrations
                     Description = table.Column<string>(type: "text", nullable: false),
                     Price = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
                     CostPrice = table.Column<decimal>(type: "numeric(10,2)", nullable: true),
-                    StockQuantity = table.Column<int>(type: "integer", nullable: false),
-                    ReorderThreshold = table.Column<int>(type: "integer", nullable: false),
                     IsActive = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW()"),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "NOW()"),
@@ -191,6 +189,62 @@ namespace CycleShopAPI.Migrations
                         principalTable: "Users",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Inventories",
+                columns: table => new
+                {
+                    InventoryId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CycleId = table.Column<Guid>(type: "uuid", nullable: false),
+                    StockQuantity = table.Column<int>(type: "integer", nullable: false),
+                    ReorderThreshold = table.Column<int>(type: "integer", nullable: false),
+                    WarehouseLocation = table.Column<string>(type: "text", nullable: false),
+                    LastStockUpdate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Inventories", x => x.InventoryId);
+                    table.ForeignKey(
+                        name: "FK_Inventories_Cycles_CycleId",
+                        column: x => x.CycleId,
+                        principalTable: "Cycles",
+                        principalColumn: "CycleId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InventoryHistories",
+                columns: table => new
+                {
+                    HistoryId = table.Column<Guid>(type: "uuid", nullable: false),
+                    CycleId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PreviousQuantity = table.Column<int>(type: "integer", nullable: false),
+                    NewQuantity = table.Column<int>(type: "integer", nullable: false),
+                    ChangeReason = table.Column<string>(type: "text", nullable: false),
+                    OrderId = table.Column<Guid>(type: "uuid", nullable: true),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InventoryHistories", x => x.HistoryId);
+                    table.ForeignKey(
+                        name: "FK_InventoryHistories_Cycles_CycleId",
+                        column: x => x.CycleId,
+                        principalTable: "Cycles",
+                        principalColumn: "CycleId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_InventoryHistories_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "OrderId");
+                    table.ForeignKey(
+                        name: "FK_InventoryHistories_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId");
                 });
 
             migrationBuilder.CreateTable(
@@ -280,6 +334,26 @@ namespace CycleShopAPI.Migrations
                 column: "TypeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Inventories_CycleId",
+                table: "Inventories",
+                column: "CycleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InventoryHistories_CycleId",
+                table: "InventoryHistories",
+                column: "CycleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InventoryHistories_OrderId",
+                table: "InventoryHistories",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InventoryHistories_UserId",
+                table: "InventoryHistories",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrderItems_CycleId",
                 table: "OrderItems",
                 column: "CycleId");
@@ -325,6 +399,12 @@ namespace CycleShopAPI.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Inventories");
+
+            migrationBuilder.DropTable(
+                name: "InventoryHistories");
+
             migrationBuilder.DropTable(
                 name: "OrderItems");
 

@@ -22,8 +22,6 @@ namespace CycleShopAPI.Models
         public decimal Price { get; set; }
         [Column(TypeName = "numeric(10,2)")]
         public decimal? CostPrice { get; set; }
-        public int StockQuantity { get; set; }
-        public int ReorderThreshold { get; set; } = 5;
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
