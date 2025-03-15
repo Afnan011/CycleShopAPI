@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace CycleShopAPI
 {
@@ -30,7 +31,7 @@ namespace CycleShopAPI
             })
             .AddJwtBearer(options =>
             {
-                options.RequireHttpsMetadata = false; 
+                options.RequireHttpsMetadata = false;
                 options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -65,6 +66,15 @@ namespace CycleShopAPI
             builder.Services.AddScoped<IInventoryService, InventoryService>();
             builder.Services.AddScoped<IOrderService, OrderService>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
+            builder.Services.AddScoped<IBrandService, BrandService>();
+            builder.Services.AddScoped<ICycleTypeService, CycleTypeService>();
+            builder.Services.AddScoped<ICycleService, CycleService>();
+            builder.Services.AddScoped<ICustomerService, CustomerService>();
+            builder.Services.AddScoped<IAddressService, AddressService>();
+            builder.Services.AddScoped<IFileService, FileService>();
+
+            // Configure static files
+            builder.Services.AddDirectoryBrowser();
 
             builder.Services.AddControllers().AddJsonOptions(options =>
             {
@@ -72,11 +82,20 @@ namespace CycleShopAPI
                 options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
             });
 
-            // Configure Swagger to include JWT Authentication
+            // Configure Swagger
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "CycleShop API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo 
+                { 
+                    Title = "CycleShop API", 
+                    Version = "v1",
+                    Description = "API for managing a cycle shop"
+                });
+
+                // Add support for file uploads in Swagger
+                c.OperationFilter<FileUploadOperationFilter>();
+
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header using the Bearer scheme. Example: 'Bearer {token}'",
@@ -107,17 +126,24 @@ namespace CycleShopAPI
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwagger(c => 
+                {
+                    // Configure Swagger JSON endpoint
+                    c.SerializeAsV2 = false;
+                });
+                
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "CycleShop API v1");
+                    c.RoutePrefix = "swagger";
+                });
             }
 
-            app.UseHttpsRedirection();
-
-            // Add authentication and authorization middleware
+            app.UseStaticFiles();
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.MapControllers();
+            
             app.Run();
         }
     }
