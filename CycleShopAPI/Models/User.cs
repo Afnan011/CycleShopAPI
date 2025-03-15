@@ -16,3 +16,4 @@ namespace CycleShopAPI.Models
         public DateTime? DeletedAt { get; set; }
     }
 }
+
