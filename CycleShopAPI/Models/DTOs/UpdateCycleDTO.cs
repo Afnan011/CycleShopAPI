@@ -12,6 +12,6 @@ namespace CycleShopAPI.Models.DTOs
         public decimal? Price { get; set; }
         public decimal? CostPrice { get; set; }
         public bool? IsActive { get; set; }
-        public IFormFile Image { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

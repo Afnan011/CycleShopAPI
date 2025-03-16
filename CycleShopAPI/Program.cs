@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace CycleShopAPI
 {
@@ -71,10 +70,6 @@ namespace CycleShopAPI
             builder.Services.AddScoped<ICycleService, CycleService>();
             builder.Services.AddScoped<ICustomerService, CustomerService>();
             builder.Services.AddScoped<IAddressService, AddressService>();
-            builder.Services.AddScoped<IFileService, FileService>();
-
-            // Configure static files
-            builder.Services.AddDirectoryBrowser();
 
             builder.Services.AddControllers().AddJsonOptions(options =>
             {
@@ -92,9 +87,6 @@ namespace CycleShopAPI
                     Version = "v1",
                     Description = "API for managing a cycle shop"
                 });
-
-                // Add support for file uploads in Swagger
-                c.OperationFilter<FileUploadOperationFilter>();
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
@@ -139,7 +131,6 @@ namespace CycleShopAPI
                 });
             }
 
-            app.UseStaticFiles();
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();

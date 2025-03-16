@@ -14,18 +14,15 @@ namespace CycleShopAPI.Controllers
         private readonly ICycleService _cycleService;
         private readonly IBrandService _brandService;
         private readonly ICycleTypeService _cycleTypeService;
-        private readonly IFileService _fileService;
 
         public CyclesController(
             ICycleService cycleService, 
             IBrandService brandService, 
-            ICycleTypeService cycleTypeService,
-            IFileService fileService)
+            ICycleTypeService cycleTypeService)
         {
             _cycleService = cycleService;
             _brandService = brandService;
             _cycleTypeService = cycleTypeService;
-            _fileService = fileService;
         }
 
         [HttpGet]
@@ -69,7 +66,7 @@ namespace CycleShopAPI.Controllers
 
         [HttpPost]
         [Authorize(Roles = "admin")]
-        public async Task<ActionResult<Cycle>> CreateCycle([FromForm] CreateCycleDTO createCycleDto)
+        public async Task<ActionResult<Cycle>> CreateCycle(CreateCycleDTO createCycleDto)
         {
             // Validate brand exists
             var brand = await _brandService.GetBrandByIdAsync(createCycleDto.BrandId);
@@ -81,13 +78,6 @@ namespace CycleShopAPI.Controllers
             if (cycleType == null)
                 return BadRequest("Invalid cycle type ID");
 
-            string? imageUrl = null;
-            if (createCycleDto.Image != null)
-            {
-                // Upload image
-                imageUrl = await _fileService.UploadFileAsync(createCycleDto.Image, "cycles");
-            }
-
             var cycle = new Cycle
             {
                 SKU = createCycleDto.SKU,
@@ -98,7 +88,7 @@ namespace CycleShopAPI.Controllers
                 Price = createCycleDto.Price,
                 CostPrice = createCycleDto.CostPrice,
                 IsActive = createCycleDto.IsActive,
-                ImageUrl = imageUrl
+                ImageUrl = createCycleDto.ImageUrl
             };
 
             var createdCycle = await _cycleService.CreateCycleAsync(cycle);
@@ -107,7 +97,7 @@ namespace CycleShopAPI.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> UpdateCycle(Guid id, [FromForm] UpdateCycleDTO updateCycleDto)
+        public async Task<IActionResult> UpdateCycle(Guid id, UpdateCycleDTO updateCycleDto)
         {
             var existingCycle = await _cycleService.GetCycleByIdAsync(id);
             if (existingCycle == null)
@@ -129,20 +119,7 @@ namespace CycleShopAPI.Controllers
                     return BadRequest("Invalid cycle type ID");
             }
 
-            // Handle image update if provided
-            if (updateCycleDto.Image != null)
-            {
-                // Delete existing image if any
-                if (!string.IsNullOrEmpty(existingCycle.ImageUrl))
-                {
-                    await _fileService.DeleteFileAsync(existingCycle.ImageUrl);
-                }
-
-                // Upload new image
-                existingCycle.ImageUrl = await _fileService.UploadFileAsync(updateCycleDto.Image, "cycles");
-            }
-
-            // Update other fields if provided
+            // Update fields if provided
             if (!string.IsNullOrEmpty(updateCycleDto.SKU))
                 existingCycle.SKU = updateCycleDto.SKU;
             if (!string.IsNullOrEmpty(updateCycleDto.ModelName))
@@ -159,6 +136,8 @@ namespace CycleShopAPI.Controllers
                 existingCycle.CostPrice = updateCycleDto.CostPrice;
             if (updateCycleDto.IsActive.HasValue)
                 existingCycle.IsActive = updateCycleDto.IsActive.Value;
+            if (!string.IsNullOrEmpty(updateCycleDto.ImageUrl))
+                existingCycle.ImageUrl = updateCycleDto.ImageUrl;
 
             var updatedCycle = await _cycleService.UpdateCycleAsync(id, existingCycle);
             if (updatedCycle == null)
@@ -171,52 +150,11 @@ namespace CycleShopAPI.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteCycle(Guid id)
         {
-            var cycle = await _cycleService.GetCycleByIdAsync(id);
-            if (cycle != null && !string.IsNullOrEmpty(cycle.ImageUrl))
-            {
-                await _fileService.DeleteFileAsync(cycle.ImageUrl);
-            }
-
             var result = await _cycleService.DeleteCycleAsync(id);
             if (!result)
                 return NotFound();
 
             return NoContent();
-        }
-
-        /// <summary>
-        /// Updates the image for a specific cycle
-        /// </summary>
-        /// <param name="id">The ID of the cycle</param>
-        /// <param name="image">The image file to upload</param>
-        /// <returns>The updated cycle information</returns>
-        [HttpPut("{id}/image")]
-        [Authorize(Roles = "admin")]
-        [Consumes("multipart/form-data")]
-        public async Task<IActionResult> UpdateCycleImage(Guid id, IFormFile image)
-        {
-            var cycle = await _cycleService.GetCycleByIdAsync(id);
-            if (cycle == null)
-                return NotFound();
-
-            if (image == null)
-                return BadRequest("No image file provided");
-
-            // Delete existing image if any
-            if (!string.IsNullOrEmpty(cycle.ImageUrl))
-            {
-                await _fileService.DeleteFileAsync(cycle.ImageUrl);
-            }
-
-            // Upload new image
-            cycle.ImageUrl = await _fileService.UploadFileAsync(image, "cycles");
-            cycle.UpdatedAt = DateTime.UtcNow;
-
-            var updatedCycle = await _cycleService.UpdateCycleAsync(id, cycle);
-            if (updatedCycle == null)
-                return NotFound();
-
-            return Ok(updatedCycle);
         }
     }
 }
