@@ -134,6 +134,13 @@ namespace CycleShopAPI
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
+
+            // Add Database Seeding
+            using (var scope = app.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<CycleShopContext>();
+                DatabaseSeeder.SeedData(context);
+            }
             
             app.Run();
         }

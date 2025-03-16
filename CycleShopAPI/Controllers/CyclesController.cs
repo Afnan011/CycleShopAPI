@@ -80,7 +80,7 @@ namespace CycleShopAPI.Controllers
 
             var cycle = new Cycle
             {
-                SKU = createCycleDto.SKU,
+                SKU = createCycleDto.SKU,  // This can be null/empty now, service will generate it
                 ModelName = createCycleDto.ModelName,
                 BrandId = createCycleDto.BrandId,
                 TypeId = createCycleDto.TypeId,

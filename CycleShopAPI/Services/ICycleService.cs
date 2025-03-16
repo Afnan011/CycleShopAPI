@@ -9,7 +9,7 @@ namespace CycleShopAPI.Services
         Task<IEnumerable<Cycle>> GetCyclesByBrandAsync(Guid brandId);
         Task<IEnumerable<Cycle>> GetCyclesByTypeAsync(Guid typeId);
         Task<Cycle> CreateCycleAsync(Cycle cycle);
-        Task<Cycle> UpdateCycleAsync(Guid cycleId, Cycle cycle);
+        Task<Cycle?> UpdateCycleAsync(Guid cycleId, Cycle cycle);
         Task<bool> DeleteCycleAsync(Guid cycleId);
     }
 }

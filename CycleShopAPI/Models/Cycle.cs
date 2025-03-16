@@ -8,7 +8,7 @@ namespace CycleShopAPI.Models
     {
         public Guid CycleId { get; set; }
         [Required, MaxLength(50)]
-        public string SKU { get; set; } = string.Empty;
+        public string? SKU { get; set; } = string.Empty;
         [Required, MaxLength(100)]
         public string ModelName { get; set; } = string.Empty;
         [ForeignKey("Brand")]
