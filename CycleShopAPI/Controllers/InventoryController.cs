@@ -1,4 +1,5 @@
 using CycleShopAPI.Models;
+using CycleShopAPI.Models.DTOs;
 using CycleShopAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -90,7 +91,7 @@ namespace CycleShopAPI.Controllers
 
         [HttpPut("stock/{cycleId}")]
         [Authorize(Roles = "admin,employee")] // Admin and employees can update stock
-        public async Task<IActionResult> UpdateStock(Guid cycleId, StockUpdateRequest request)
+        public async Task<IActionResult> UpdateStock(Guid cycleId, StockUpdateRequestDTO request)
         {
             try
             {
@@ -121,10 +122,5 @@ namespace CycleShopAPI.Controllers
             var history = await _inventoryService.GetInventoryHistoryAsync(cycleId);
             return Ok(history);
         }
-    }
-
-    public class StockUpdateRequest
-    {
-        public int QuantityChange { get; set; }
     }
 }

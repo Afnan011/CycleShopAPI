@@ -1,4 +1,5 @@
 using CycleShopAPI.Models;
+using CycleShopAPI.Models.DTOs;
 using CycleShopAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -50,7 +51,7 @@ namespace CycleShopAPI.Controllers
 
         [HttpPost]
         [Authorize(Roles = "admin,employee")]
-        public async Task<ActionResult<Order>> CreateOrder(CreateOrderRequest request)
+        public async Task<ActionResult<Order>> CreateOrder(CreateOrderRequestDTO request)
         {
             try
             {
@@ -74,7 +75,7 @@ namespace CycleShopAPI.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "admin,employee")]
-        public async Task<IActionResult> UpdateOrder(Guid id, UpdateOrderRequest request)
+        public async Task<IActionResult> UpdateOrder(Guid id, UpdateOrderRequestDTO request)
         {
             var existingOrder = await _orderService.GetOrderByIdAsync(id);
             if (existingOrder == null)
@@ -147,28 +148,5 @@ namespace CycleShopAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-    }
-
-    public class CreateOrderRequest
-    {
-        public Guid CustomerId { get; set; }
-        public Guid EmployeeId { get; set; }
-        public Guid? ShippingAddressId { get; set; }
-        public decimal Discount { get; set; } = 0;
-        public string Notes { get; set; }
-        public List<OrderItem> Items { get; set; } = new List<OrderItem>();
-    }
-
-    public class UpdateOrderRequest
-    {
-        public OrderStatus Status { get; set; }
-        public Guid? ShippingAddressId { get; set; }
-        public decimal Discount { get; set; }
-        public string Notes { get; set; }
-    }
-
-    public class UpdateOrderStatusRequest
-    {
-        public OrderStatus Status { get; set; }
     }
 }

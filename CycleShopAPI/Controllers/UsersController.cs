@@ -1,4 +1,5 @@
 using CycleShopAPI.Models;
+using CycleShopAPI.Models.DTOs;
 using CycleShopAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -66,7 +67,7 @@ namespace CycleShopAPI.Controllers
 
         [HttpPost]
         [Authorize(Roles = "admin")]
-        public async Task<ActionResult<User>> CreateUser(CreateUserRequest request)
+        public async Task<ActionResult<User>> CreateUser(CreateUserRequestDTO request)
         {
             try
             {
@@ -89,7 +90,7 @@ namespace CycleShopAPI.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> UpdateUser(Guid id, UpdateUserRequest request)
+        public async Task<IActionResult> UpdateUser(Guid id, UpdateUserRequestDTO request)
         {
             var existingUser = await _userService.GetUserByIdAsync(id);
             if (existingUser == null)
@@ -129,14 +130,14 @@ namespace CycleShopAPI.Controllers
 
         [HttpPost("authenticate")]
         [AllowAnonymous]
-        public async Task<ActionResult<AuthResponse>> Authenticate(AuthenticateRequest request)
+        public async Task<ActionResult<AuthResponseDTO>> Authenticate(AuthenticateRequestDTO request)
         {
             var (success, token, user) = await _userService.ValidateCredentialsAsync(request.UsernameOrEmail, request.Password);
             
             if (!success)
                 return Unauthorized(new { message = "Username/email or password is incorrect" });
 
-            var response = new AuthResponse
+            var response = new AuthResponseDTO
             {
                 Token = token,
                 Username = user.Username,
@@ -148,7 +149,7 @@ namespace CycleShopAPI.Controllers
 
         [HttpPost("{id}/change-password")]
         [Authorize]
-        public async Task<IActionResult> ChangePassword(Guid id, ChangePasswordRequest request)
+        public async Task<IActionResult> ChangePassword(Guid id, ChangePasswordRequestDTO request)
         {
             // Verify the user is changing their own password or is an admin
             var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -165,40 +166,5 @@ namespace CycleShopAPI.Controllers
                 
             return BadRequest("Current password is incorrect or user not found");
         }
-    }
-
-    public class CreateUserRequest
-    {
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
-        public UserRole? Role { get; set; }
-    }
-
-    public class UpdateUserRequest
-    {
-        public string? Username { get; set; }
-        public string? Email { get; set; }
-        public UserRole? Role { get; set; }
-        public bool? IsActive { get; set; }
-    }
-
-    public class AuthenticateRequest
-    {
-        public string UsernameOrEmail { get; set; }
-        public string Password { get; set; }
-    }
-
-    public class AuthResponse
-    {
-        public string Token { get; set; }
-        public string Username { get; set; }
-        public UserRole Role { get; set; }
-    }
-
-    public class ChangePasswordRequest
-    {
-        public string CurrentPassword { get; set; }
-        public string NewPassword { get; set; }
     }
 }

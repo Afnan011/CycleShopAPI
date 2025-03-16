@@ -1,4 +1,5 @@
 using CycleShopAPI.Models;
+using CycleShopAPI.Models.DTOs;
 using CycleShopAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -42,7 +43,7 @@ namespace CycleShopAPI.Controllers
 
         [HttpPost]
         [Authorize(Roles = "admin,employee")]
-        public async Task<ActionResult<Payment>> ProcessPayment(ProcessPaymentRequest request)
+        public async Task<ActionResult<Payment>> ProcessPayment(ProcessPaymentRequestDTO request)
         {
             try
             {
@@ -66,7 +67,7 @@ namespace CycleShopAPI.Controllers
 
         [HttpPut("{id}/status")]
         [Authorize(Roles = "admin,employee")]
-        public async Task<IActionResult> UpdatePaymentStatus(Guid id, UpdatePaymentStatusRequest request)
+        public async Task<IActionResult> UpdatePaymentStatus(Guid id, UpdatePaymentStatusRequestDTO request)
         {
             var result = await _paymentService.UpdatePaymentStatusAsync(id, request.Status);
             if (result)
@@ -77,7 +78,7 @@ namespace CycleShopAPI.Controllers
 
         [HttpPost("{id}/refund")]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> RefundPayment(Guid id, RefundRequest request)
+        public async Task<IActionResult> RefundPayment(Guid id, RefundPaymentRequestDTO request)
         {
             var result = await _paymentService.RefundPaymentAsync(id, request.Reason);
             if (result)
@@ -107,24 +108,5 @@ namespace CycleShopAPI.Controllers
             var total = await _paymentService.GetTotalPaymentsForPeriodAsync(startDate, endDate);
             return Ok(total);
         }
-    }
-
-    public class ProcessPaymentRequest
-    {
-        public Guid OrderId { get; set; }
-        public decimal Amount { get; set; }
-        public PaymentType PaymentType { get; set; }
-        public string StripePaymentId { get; set; }
-        public string ReceiptUrl { get; set; }
-    }
-
-    public class UpdatePaymentStatusRequest
-    {
-        public PaymentStatus Status { get; set; }
-    }
-
-    public class RefundRequest
-    {
-        public string Reason { get; set; }
     }
 }
