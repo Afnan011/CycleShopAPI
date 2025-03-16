@@ -147,24 +147,21 @@ namespace CycleShopAPI.Controllers
             return Ok(response);
         }
 
-        [HttpPost("{id}/change-password")]
-        [Authorize]
+        [HttpPut("{id}/change-password")]
         public async Task<IActionResult> ChangePassword(Guid id, ChangePasswordRequestDTO request)
         {
-            // Verify the user is changing their own password or is an admin
-            var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var isAdmin = User.IsInRole("admin");
-            
-            if (!isAdmin && currentUserId != id.ToString())
+            if (request == null)
             {
-                return Forbid();
+                return BadRequest("Request cannot be null");
             }
 
-            var result = await _userService.ChangePasswordAsync(id, request.CurrentPassword, request.NewPassword);
-            if (result)
-                return NoContent();
-                
-            return BadRequest("Current password is incorrect or user not found");
+            var success = await _userService.ChangePasswordAsync(id, request.CurrentPassword, request.NewPassword);
+            if (!success)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
         }
     }
 }
