@@ -119,14 +119,14 @@ namespace CycleShopAPI.Tests
         {
             // Arrange
             var brandId = Guid.NewGuid();
-            var updateRequest = new CreateBrandDTO
+            var updateRequest = new UpdateBrandDTO
             {
                 Name = "Updated Brand",
                 Description = "Updated Description"
             };
 
-            var existingBrand = new Brand 
-            { 
+            var existingBrand = new Brand
+            {
                 BrandId = brandId,
                 Name = "Old Brand",
                 Description = "Old Description"
@@ -159,7 +159,7 @@ namespace CycleShopAPI.Tests
         {
             // Arrange
             var brandId = Guid.NewGuid();
-            var updateRequest = new CreateBrandDTO
+            var updateRequest = new UpdateBrandDTO
             {
                 Name = "Updated Brand",
                 Description = "Updated Description"

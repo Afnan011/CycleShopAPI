@@ -52,14 +52,20 @@ namespace CycleShopAPI.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> UpdateBrand(Guid id, CreateBrandDTO updateBrandDto)
+        public async Task<IActionResult> UpdateBrand(Guid id, UpdateBrandDTO updateBrandDto)
         {
             var existingBrand = await _brandService.GetBrandByIdAsync(id);
             if (existingBrand == null)
                 return NotFound();
 
-            existingBrand.Name = updateBrandDto.Name;
-            existingBrand.Description = updateBrandDto.Description;
+            if(updateBrandDto.Name == null && updateBrandDto.Description == null)
+                return BadRequest("At least one property must be provided for update");
+
+            if(updateBrandDto.Name == existingBrand.Name && updateBrandDto.Description == existingBrand.Description)
+                return BadRequest("No changes detected");
+
+            existingBrand.Name = updateBrandDto.Name ?? existingBrand.Name;
+            existingBrand.Description = updateBrandDto.Description ?? existingBrand.Description;
             existingBrand.UpdatedAt = DateTime.UtcNow;
 
             var updatedBrand = await _brandService.UpdateBrandAsync(id, existingBrand);

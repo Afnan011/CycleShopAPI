@@ -95,7 +95,7 @@ namespace CycleShopAPI.Tests
         public async Task CreateInventory_WithValidData_ReturnsCreatedInventory()
         {
             // Arrange
-            var inventory = new Inventory
+            var inventoryDto = new CreateInventoryDTO
             {
                 CycleId = Guid.NewGuid(),
                 StockQuantity = 20,
@@ -106,18 +106,18 @@ namespace CycleShopAPI.Tests
             var createdInventory = new Inventory
             {
                 InventoryId = Guid.NewGuid(),
-                CycleId = inventory.CycleId,
-                StockQuantity = inventory.StockQuantity,
-                ReorderThreshold = inventory.ReorderThreshold,
-                WarehouseLocation = inventory.WarehouseLocation,
+                CycleId = inventoryDto.CycleId,
+                StockQuantity = inventoryDto.StockQuantity,
+                ReorderThreshold = inventoryDto.ReorderThreshold,
+                WarehouseLocation = inventoryDto.WarehouseLocation,
                 LastStockUpdate = DateTime.UtcNow
             };
 
-            _mockInventoryService.Setup(s => s.CreateInventoryAsync(It.IsAny<Inventory>()))
+            _mockInventoryService.Setup(s => s.CreateInventoryAsync(It.IsAny<CreateInventoryDTO>()))
                                 .ReturnsAsync(createdInventory);
 
             // Act
-            var result = await _controller.CreateInventory(inventory);
+            var result = await _controller.CreateInventory(inventoryDto);
 
             // Assert
             Assert.That(result.Result, Is.InstanceOf<CreatedAtActionResult>());
@@ -131,18 +131,18 @@ namespace CycleShopAPI.Tests
         {
             // Arrange
             var inventoryId = Guid.NewGuid();
-            var inventory = new Inventory
+            var updateInventoryDto = new UpdateInventoryDTO
             {
-                InventoryId = inventoryId,
-                CycleId = Guid.NewGuid(),
-                StockQuantity = 25
+                StockQuantity = 25,
+                ReorderThreshold = 10,
+                WarehouseLocation = "B2"
             };
 
-            _mockInventoryService.Setup(s => s.UpdateInventoryAsync(It.IsAny<Inventory>()))
+            _mockInventoryService.Setup(s => s.UpdateInventoryAsync(inventoryId, updateInventoryDto))
                                 .ReturnsAsync(true);
 
             // Act
-            var result = await _controller.UpdateInventory(inventoryId, inventory);
+            var result = await _controller.UpdateInventory(inventoryId, updateInventoryDto);
 
             // Assert
             Assert.That(result, Is.InstanceOf<NoContentResult>());

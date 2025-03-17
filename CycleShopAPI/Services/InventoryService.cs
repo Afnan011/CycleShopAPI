@@ -1,5 +1,6 @@
 using CycleShopAPI.Data;
 using CycleShopAPI.Models;
+using CycleShopAPI.Models.DTOs;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -46,28 +47,33 @@ namespace CycleShopAPI.Services
                 .FirstOrDefaultAsync(i => i.CycleId == cycleId);
         }
 
-        public async Task<Inventory> CreateInventoryAsync(Inventory inventory)
+        public async Task<Inventory> CreateInventoryAsync(CreateInventoryDTO inventoryDto)
         {
-            // Check if inventory for this cycle already exists
             var existingInventory = await _context.Inventories
-                .FirstOrDefaultAsync(i => i.CycleId == inventory.CycleId);
+                .FirstOrDefaultAsync(i => i.CycleId == inventoryDto.CycleId);
             
             if (existingInventory != null)
             {
-                throw new InvalidOperationException($"Inventory for cycle ID {inventory.CycleId} already exists");
+                throw new InvalidOperationException($"Inventory for cycle ID {inventoryDto.CycleId} already exists");
             }
 
-            // Verify cycle exists
-            var cycle = await _context.Cycles.FindAsync(inventory.CycleId);
+            var cycle = await _context.Cycles.FindAsync(inventoryDto.CycleId);
             if (cycle == null)
             {
-                throw new InvalidOperationException($"Cycle with ID {inventory.CycleId} does not exist");
+                throw new InvalidOperationException($"Cycle with ID {inventoryDto.CycleId} does not exist");
             }
 
-            inventory.LastStockUpdate = DateTime.UtcNow;
+            var inventory = new Inventory
+            {
+                CycleId = inventoryDto.CycleId,
+                StockQuantity = inventoryDto.StockQuantity,
+                ReorderThreshold = inventoryDto.ReorderThreshold,
+                WarehouseLocation = inventoryDto.WarehouseLocation,
+                LastStockUpdate = DateTime.UtcNow
+            };
+
             await _context.Inventories.AddAsync(inventory);
             
-            // Create inventory history record
             var history = new InventoryHistory
             {
                 CycleId = inventory.CycleId,
@@ -82,9 +88,9 @@ namespace CycleShopAPI.Services
             return inventory;
         }
 
-        public async Task<bool> UpdateInventoryAsync(Inventory inventory)
+        public async Task<bool> UpdateInventoryAsync(Guid id, UpdateInventoryDTO inventoryDto)
         {
-            var existingInventory = await _context.Inventories.FindAsync(inventory.InventoryId);
+            var existingInventory = await _context.Inventories.FindAsync(id);
             if (existingInventory == null)
             {
                 return false;
@@ -92,24 +98,29 @@ namespace CycleShopAPI.Services
 
             int oldQuantity = existingInventory.StockQuantity;
 
-            // Update inventory properties
-            existingInventory.StockQuantity = inventory.StockQuantity;
-            existingInventory.ReorderThreshold = inventory.ReorderThreshold;
-            existingInventory.WarehouseLocation = inventory.WarehouseLocation;
+            if (inventoryDto.StockQuantity.HasValue)
+                existingInventory.StockQuantity = inventoryDto.StockQuantity.Value;
+            if (inventoryDto.ReorderThreshold.HasValue)
+                existingInventory.ReorderThreshold = inventoryDto.ReorderThreshold.Value;
+            if (inventoryDto.WarehouseLocation != null)
+                existingInventory.WarehouseLocation = inventoryDto.WarehouseLocation;
+            
             existingInventory.LastStockUpdate = DateTime.UtcNow;
 
             _context.Inventories.Update(existingInventory);
             
-            // Create inventory history record
-            var history = new InventoryHistory
+            if (inventoryDto.StockQuantity.HasValue && oldQuantity != inventoryDto.StockQuantity.Value)
             {
-                CycleId = existingInventory.CycleId,
-                PreviousQuantity = oldQuantity,
-                NewQuantity = inventory.StockQuantity,
-                ChangeReason = "Manual inventory update",
-                CreatedAt = DateTime.UtcNow
-            };
-            await _context.InventoryHistories.AddAsync(history);
+                var history = new InventoryHistory
+                {
+                    CycleId = existingInventory.CycleId,
+                    PreviousQuantity = oldQuantity,
+                    NewQuantity = inventoryDto.StockQuantity.Value,
+                    ChangeReason = "Manual inventory update",
+                    CreatedAt = DateTime.UtcNow
+                };
+                await _context.InventoryHistories.AddAsync(history);
+            }
             
             return await _context.SaveChangesAsync() > 0;
         }
@@ -125,7 +136,6 @@ namespace CycleShopAPI.Services
             int oldQuantity = inventory.StockQuantity;
             inventory.StockQuantity += quantityChange;
             
-            // Prevent negative inventory
             if (inventory.StockQuantity < 0)
             {
                 inventory.StockQuantity = 0;
@@ -134,7 +144,6 @@ namespace CycleShopAPI.Services
             
             inventory.LastStockUpdate = DateTime.UtcNow;
             
-            // Create inventory history record
             var history = new InventoryHistory
             {
                 CycleId = cycleId,
@@ -143,8 +152,8 @@ namespace CycleShopAPI.Services
                 ChangeReason = quantityChange > 0 ? "Stock added" : "Stock removed",
                 CreatedAt = DateTime.UtcNow
             };
-            
             await _context.InventoryHistories.AddAsync(history);
+            
             return await _context.SaveChangesAsync() > 0;
         }
 

@@ -11,7 +11,7 @@ namespace CycleShopAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize] // Requires authentication for all endpoints
+    [Authorize] 
     public class InventoryController : ControllerBase
     {
         private readonly IInventoryService _inventoryService;
@@ -22,7 +22,7 @@ namespace CycleShopAPI.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous] // Allow public access to view inventory
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Inventory>>> GetAllInventory()
         {
             var inventory = await _inventoryService.GetAllInventoryAsync();
@@ -30,7 +30,7 @@ namespace CycleShopAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        [AllowAnonymous] // Allow public access to view inventory details
+        [AllowAnonymous] 
         public async Task<ActionResult<Inventory>> GetInventory(Guid id)
         {
             var inventory = await _inventoryService.GetInventoryByIdAsync(id);
@@ -42,7 +42,7 @@ namespace CycleShopAPI.Controllers
         }
 
         [HttpGet("cycle/{cycleId}")]
-        [AllowAnonymous] // Allow public access to view cycle inventory
+        [AllowAnonymous]
         public async Task<ActionResult<Inventory>> GetInventoryByCycleId(Guid cycleId)
         {
             var inventory = await _inventoryService.GetInventoryByCycleIdAsync(cycleId);
@@ -54,12 +54,12 @@ namespace CycleShopAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "admin")] // Only admin can create inventory
-        public async Task<ActionResult<Inventory>> CreateInventory(Inventory inventory)
+        [Authorize(Roles = "admin")] 
+        public async Task<ActionResult<Inventory>> CreateInventory(CreateInventoryDTO createInventoryDto)
         {
             try
             {
-                var createdInventory = await _inventoryService.CreateInventoryAsync(inventory);
+                var createdInventory = await _inventoryService.CreateInventoryAsync(createInventoryDto);
                 return CreatedAtAction(nameof(GetInventory), new { id = createdInventory.InventoryId }, createdInventory);
             }
             catch (InvalidOperationException ex)
@@ -69,15 +69,15 @@ namespace CycleShopAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = "admin")] // Only admin can update inventory
-        public async Task<IActionResult> UpdateInventory(Guid id, Inventory inventory)
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> UpdateInventory(Guid id, UpdateInventoryDTO updateInventoryDto)
         {
-            if (id != inventory.InventoryId)
-                return BadRequest("ID mismatch");
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
             try
             {
-                var result = await _inventoryService.UpdateInventoryAsync(inventory);
+                var result = await _inventoryService.UpdateInventoryAsync(id, updateInventoryDto);
                 if (result)
                     return NoContent();
 
@@ -90,7 +90,7 @@ namespace CycleShopAPI.Controllers
         }
 
         [HttpPut("stock/{cycleId}")]
-        [Authorize(Roles = "admin,employee")] // Admin and employees can update stock
+        [Authorize(Roles = "admin,employee")] 
         public async Task<IActionResult> UpdateStock(Guid cycleId, StockUpdateRequestDTO request)
         {
             try
@@ -108,7 +108,7 @@ namespace CycleShopAPI.Controllers
         }
 
         [HttpGet("low-stock")]
-        [Authorize(Roles = "admin,employee")] // Admin and employees can view low stock
+        [Authorize(Roles = "admin,employee")] 
         public async Task<ActionResult<IEnumerable<Inventory>>> GetLowStockInventory([FromQuery] int? threshold)
         {
             var inventory = await _inventoryService.GetLowStockInventoryAsync(threshold ?? 0);
@@ -116,7 +116,7 @@ namespace CycleShopAPI.Controllers
         }
 
         [HttpGet("history/{cycleId}")]
-        [Authorize(Roles = "admin,employee")] // Admin and employees can view history
+        [Authorize(Roles = "admin,employee")] 
         public async Task<ActionResult<IEnumerable<InventoryHistory>>> GetInventoryHistory(Guid cycleId)
         {
             var history = await _inventoryService.GetInventoryHistoryAsync(cycleId);

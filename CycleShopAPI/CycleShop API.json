@@ -1,0 +1,3450 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+      "title": "CycleShop API",
+      "description": "API for managing a cycle shop",
+      "version": "v1"
+    },
+    "paths": {
+      "/api/Addresses/{id}": {
+        "get": {
+          "tags": [
+            "Addresses"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Address"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Address"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Address"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "Addresses"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Address"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Address"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Address"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "Addresses"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/Addresses": {
+        "post": {
+          "tags": [
+            "Addresses"
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Address"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Address"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Address"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Address"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Address"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Address"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/Brands": {
+        "get": {
+          "tags": [
+            "Brands"
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Brand"
+                    }
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Brand"
+                    }
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Brand"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Brands"
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateBrandDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateBrandDTO"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateBrandDTO"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Brand"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Brand"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Brand"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/Brands/{id}": {
+        "get": {
+          "tags": [
+            "Brands"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Brand"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Brand"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Brand"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "Brands"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateBrandDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateBrandDTO"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateBrandDTO"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "Brands"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/Customers": {
+        "get": {
+          "tags": [
+            "Customers"
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Customer"
+                    }
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Customer"
+                    }
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Customer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Customers"
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateCustomerDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateCustomerDTO"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateCustomerDTO"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Customer"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Customer"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Customer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/Customers/{id}": {
+        "get": {
+          "tags": [
+            "Customers"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Customer"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Customer"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Customer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "Customers"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateCustomerDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateCustomerDTO"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateCustomerDTO"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "Customers"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/Customers/{id}/loyalty-points": {
+        "patch": {
+          "tags": [
+            "Customers"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/Cycles": {
+        "get": {
+          "tags": [
+            "Cycles"
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Cycle"
+                    }
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Cycle"
+                    }
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Cycle"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Cycles"
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateCycleDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateCycleDTO"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateCycleDTO"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Cycle"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Cycle"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Cycle"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/Cycles/{id}": {
+        "get": {
+          "tags": [
+            "Cycles"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Cycle"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Cycle"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Cycle"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "Cycles"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateCycleDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateCycleDTO"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateCycleDTO"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "Cycles"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/Cycles/brand/{brandId}": {
+        "get": {
+          "tags": [
+            "Cycles"
+          ],
+          "parameters": [
+            {
+              "name": "brandId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Cycle"
+                    }
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Cycle"
+                    }
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Cycle"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/Cycles/type/{typeId}": {
+        "get": {
+          "tags": [
+            "Cycles"
+          ],
+          "parameters": [
+            {
+              "name": "typeId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Cycle"
+                    }
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Cycle"
+                    }
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Cycle"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/CycleTypes": {
+        "get": {
+          "tags": [
+            "CycleTypes"
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/CycleType"
+                    }
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/CycleType"
+                    }
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/CycleType"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "CycleTypes"
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CycleType"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CycleType"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CycleType"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/CycleTypes/{id}": {
+        "get": {
+          "tags": [
+            "CycleTypes"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CycleType"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CycleType"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/CycleType"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "CycleTypes"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "CycleTypes"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/Inventory": {
+        "get": {
+          "tags": [
+            "Inventory"
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Inventory"
+                    }
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Inventory"
+                    }
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Inventory"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Inventory"
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Inventory"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Inventory"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Inventory"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Inventory"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Inventory"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Inventory"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/Inventory/{id}": {
+        "get": {
+          "tags": [
+            "Inventory"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Inventory"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Inventory"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Inventory"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "Inventory"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Inventory"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Inventory"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Inventory"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/Inventory/cycle/{cycleId}": {
+        "get": {
+          "tags": [
+            "Inventory"
+          ],
+          "parameters": [
+            {
+              "name": "cycleId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Inventory"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Inventory"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Inventory"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/Inventory/stock/{cycleId}": {
+        "put": {
+          "tags": [
+            "Inventory"
+          ],
+          "parameters": [
+            {
+              "name": "cycleId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StockUpdateRequestDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StockUpdateRequestDTO"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StockUpdateRequestDTO"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/Inventory/low-stock": {
+        "get": {
+          "tags": [
+            "Inventory"
+          ],
+          "parameters": [
+            {
+              "name": "threshold",
+              "in": "query",
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Inventory"
+                    }
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Inventory"
+                    }
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Inventory"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/Inventory/history/{cycleId}": {
+        "get": {
+          "tags": [
+            "Inventory"
+          ],
+          "parameters": [
+            {
+              "name": "cycleId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/InventoryHistory"
+                    }
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/InventoryHistory"
+                    }
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/InventoryHistory"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/Orders": {
+        "get": {
+          "tags": [
+            "Orders"
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Order"
+                    }
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Order"
+                    }
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Order"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Orders"
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateOrderRequestDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateOrderRequestDTO"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateOrderRequestDTO"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Order"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Order"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Order"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/Orders/{id}": {
+        "get": {
+          "tags": [
+            "Orders"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Order"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Order"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Order"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "Orders"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateOrderRequestDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateOrderRequestDTO"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateOrderRequestDTO"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "Orders"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/Orders/customer/{customerId}": {
+        "get": {
+          "tags": [
+            "Orders"
+          ],
+          "parameters": [
+            {
+              "name": "customerId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Order"
+                    }
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Order"
+                    }
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Order"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/Orders/{id}/status": {
+        "put": {
+          "tags": [
+            "Orders"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateOrderStatusRequest"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateOrderStatusRequest"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateOrderStatusRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/Orders/{id}/cancel": {
+        "post": {
+          "tags": [
+            "Orders"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/Orders/{orderId}/items": {
+        "get": {
+          "tags": [
+            "Orders"
+          ],
+          "parameters": [
+            {
+              "name": "orderId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/OrderItem"
+                    }
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/OrderItem"
+                    }
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/OrderItem"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/Orders/calculate-total": {
+        "post": {
+          "tags": [
+            "Orders"
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrderItem"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrderItem"
+                  }
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrderItem"
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "number",
+                    "format": "double"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "type": "number",
+                    "format": "double"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "type": "number",
+                    "format": "double"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/Payments/{id}": {
+        "get": {
+          "tags": [
+            "Payments"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Payment"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Payment"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Payment"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/Payments/order/{orderId}": {
+        "get": {
+          "tags": [
+            "Payments"
+          ],
+          "parameters": [
+            {
+              "name": "orderId",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Payment"
+                    }
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Payment"
+                    }
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Payment"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/Payments": {
+        "post": {
+          "tags": [
+            "Payments"
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessPaymentRequestDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessPaymentRequestDTO"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProcessPaymentRequestDTO"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Payment"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Payment"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Payment"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/Payments/{id}/status": {
+        "put": {
+          "tags": [
+            "Payments"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdatePaymentStatusRequestDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdatePaymentStatusRequestDTO"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdatePaymentStatusRequestDTO"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/Payments/{id}/refund": {
+        "post": {
+          "tags": [
+            "Payments"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefundPaymentRequestDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefundPaymentRequestDTO"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefundPaymentRequestDTO"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/Payments/reports/by-date-range": {
+        "get": {
+          "tags": [
+            "Payments"
+          ],
+          "parameters": [
+            {
+              "name": "startDate",
+              "in": "query",
+              "schema": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            {
+              "name": "endDate",
+              "in": "query",
+              "schema": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Payment"
+                    }
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Payment"
+                    }
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Payment"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/Payments/reports/total-for-period": {
+        "get": {
+          "tags": [
+            "Payments"
+          ],
+          "parameters": [
+            {
+              "name": "startDate",
+              "in": "query",
+              "schema": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            {
+              "name": "endDate",
+              "in": "query",
+              "schema": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "number",
+                    "format": "double"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "type": "number",
+                    "format": "double"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "type": "number",
+                    "format": "double"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/Users": {
+        "get": {
+          "tags": [
+            "Users"
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/User"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Users"
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateUserRequestDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateUserRequestDTO"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateUserRequestDTO"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/Users/{id}": {
+        "get": {
+          "tags": [
+            "Users"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "Users"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateUserRequestDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateUserRequestDTO"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateUserRequestDTO"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "Users"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/api/Users/by-username/{username}": {
+        "get": {
+          "tags": [
+            "Users"
+          ],
+          "parameters": [
+            {
+              "name": "username",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/Users/by-email/{email}": {
+        "get": {
+          "tags": [
+            "Users"
+          ],
+          "parameters": [
+            {
+              "name": "email",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/Users/authenticate": {
+        "post": {
+          "tags": [
+            "Users"
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticateRequestDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticateRequestDTO"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticateRequestDTO"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "text/plain": {
+                  "schema": {
+                    "$ref": "#/components/schemas/AuthResponseDTO"
+                  }
+                },
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/AuthResponseDTO"
+                  }
+                },
+                "text/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/AuthResponseDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/Users/{id}/change-password": {
+        "put": {
+          "tags": [
+            "Users"
+          ],
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "string",
+                "format": "uuid"
+              }
+            }
+          ],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangePasswordRequestDTO"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangePasswordRequestDTO"
+                }
+              },
+              "application/*+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChangePasswordRequestDTO"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "Address": {
+          "required": [
+            "city",
+            "country",
+            "postalCode",
+            "state",
+            "streetLine1"
+          ],
+          "type": "object",
+          "properties": {
+            "addressId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "streetLine1": {
+              "maxLength": 100,
+              "minLength": 1,
+              "type": "string"
+            },
+            "streetLine2": {
+              "maxLength": 100,
+              "type": "string",
+              "nullable": true
+            },
+            "city": {
+              "maxLength": 50,
+              "minLength": 1,
+              "type": "string"
+            },
+            "state": {
+              "maxLength": 50,
+              "minLength": 1,
+              "type": "string"
+            },
+            "postalCode": {
+              "maxLength": 20,
+              "minLength": 1,
+              "type": "string"
+            },
+            "country": {
+              "maxLength": 50,
+              "minLength": 1,
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "additionalProperties": false
+        },
+        "AddressDTO": {
+          "required": [
+            "city",
+            "country",
+            "postalCode",
+            "state",
+            "streetLine1"
+          ],
+          "type": "object",
+          "properties": {
+            "streetLine1": {
+              "maxLength": 100,
+              "minLength": 1,
+              "type": "string"
+            },
+            "streetLine2": {
+              "maxLength": 100,
+              "type": "string",
+              "nullable": true
+            },
+            "city": {
+              "maxLength": 50,
+              "minLength": 1,
+              "type": "string"
+            },
+            "state": {
+              "maxLength": 50,
+              "minLength": 1,
+              "type": "string"
+            },
+            "postalCode": {
+              "maxLength": 20,
+              "minLength": 1,
+              "type": "string"
+            },
+            "country": {
+              "maxLength": 50,
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "AuthResponseDTO": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string",
+              "nullable": true
+            },
+            "username": {
+              "type": "string",
+              "nullable": true
+            },
+            "role": {
+              "$ref": "#/components/schemas/UserRole"
+            }
+          },
+          "additionalProperties": false
+        },
+        "AuthenticateRequestDTO": {
+          "type": "object",
+          "properties": {
+            "usernameOrEmail": {
+              "type": "string",
+              "nullable": true
+            },
+            "password": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "Brand": {
+          "type": "object",
+          "properties": {
+            "brandId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "name": {
+              "type": "string",
+              "nullable": true
+            },
+            "description": {
+              "type": "string",
+              "nullable": true
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "additionalProperties": false
+        },
+        "ChangePasswordRequestDTO": {
+          "type": "object",
+          "properties": {
+            "currentPassword": {
+              "type": "string",
+              "nullable": true
+            },
+            "newPassword": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "CreateBrandDTO": {
+          "required": [
+            "description",
+            "name"
+          ],
+          "type": "object",
+          "properties": {
+            "name": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "description": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "CreateCustomerDTO": {
+          "required": [
+            "email",
+            "firstName",
+            "lastName",
+            "phone"
+          ],
+          "type": "object",
+          "properties": {
+            "firstName": {
+              "maxLength": 50,
+              "minLength": 1,
+              "type": "string"
+            },
+            "lastName": {
+              "maxLength": 50,
+              "minLength": 1,
+              "type": "string"
+            },
+            "email": {
+              "maxLength": 100,
+              "minLength": 1,
+              "type": "string",
+              "format": "email"
+            },
+            "phone": {
+              "maxLength": 20,
+              "minLength": 1,
+              "type": "string"
+            },
+            "billingAddress": {
+              "$ref": "#/components/schemas/AddressDTO"
+            },
+            "shippingAddress": {
+              "$ref": "#/components/schemas/AddressDTO"
+            }
+          },
+          "additionalProperties": false
+        },
+        "CreateCycleDTO": {
+          "required": [
+            "description",
+            "modelName"
+          ],
+          "type": "object",
+          "properties": {
+            "sku": {
+              "type": "string",
+              "nullable": true
+            },
+            "modelName": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "brandId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "typeId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "price": {
+              "type": "number",
+              "format": "double"
+            },
+            "costPrice": {
+              "type": "number",
+              "format": "double"
+            },
+            "isActive": {
+              "type": "boolean"
+            },
+            "imageUrl": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "CreateOrderRequestDTO": {
+          "type": "object",
+          "properties": {
+            "customerId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "employeeId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "shippingAddressId": {
+              "type": "string",
+              "format": "uuid",
+              "nullable": true
+            },
+            "discount": {
+              "type": "number",
+              "format": "double"
+            },
+            "notes": {
+              "type": "string",
+              "nullable": true
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/OrderItem"
+              },
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "CreateUserRequestDTO": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string",
+              "nullable": true
+            },
+            "email": {
+              "type": "string",
+              "nullable": true
+            },
+            "password": {
+              "type": "string",
+              "nullable": true
+            },
+            "role": {
+              "$ref": "#/components/schemas/UserRole"
+            }
+          },
+          "additionalProperties": false
+        },
+        "Customer": {
+          "required": [
+            "firstName",
+            "lastName"
+          ],
+          "type": "object",
+          "properties": {
+            "customerId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "firstName": {
+              "maxLength": 50,
+              "minLength": 1,
+              "type": "string"
+            },
+            "lastName": {
+              "maxLength": 50,
+              "minLength": 1,
+              "type": "string"
+            },
+            "email": {
+              "maxLength": 100,
+              "type": "string",
+              "nullable": true
+            },
+            "phone": {
+              "maxLength": 20,
+              "type": "string",
+              "nullable": true
+            },
+            "billingAddressId": {
+              "type": "string",
+              "format": "uuid",
+              "nullable": true
+            },
+            "billingAddress": {
+              "$ref": "#/components/schemas/Address"
+            },
+            "shippingAddressId": {
+              "type": "string",
+              "format": "uuid",
+              "nullable": true
+            },
+            "shippingAddress": {
+              "$ref": "#/components/schemas/Address"
+            },
+            "loyaltyPoints": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "deletedAt": {
+              "type": "string",
+              "format": "date-time",
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "Cycle": {
+          "required": [
+            "modelName",
+            "sku"
+          ],
+          "type": "object",
+          "properties": {
+            "cycleId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "sku": {
+              "maxLength": 50,
+              "minLength": 1,
+              "type": "string"
+            },
+            "modelName": {
+              "maxLength": 100,
+              "minLength": 1,
+              "type": "string"
+            },
+            "brandId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "brand": {
+              "$ref": "#/components/schemas/Brand"
+            },
+            "typeId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "cycleType": {
+              "$ref": "#/components/schemas/CycleType"
+            },
+            "description": {
+              "type": "string",
+              "nullable": true
+            },
+            "price": {
+              "type": "number",
+              "format": "double"
+            },
+            "costPrice": {
+              "type": "number",
+              "format": "double",
+              "nullable": true
+            },
+            "isActive": {
+              "type": "boolean"
+            },
+            "imageUrl": {
+              "type": "string",
+              "nullable": true
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "deletedAt": {
+              "type": "string",
+              "format": "date-time",
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "CycleType": {
+          "type": "object",
+          "properties": {
+            "cycleTypeId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "name": {
+              "type": "string",
+              "nullable": true
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "additionalProperties": false
+        },
+        "Inventory": {
+          "type": "object",
+          "properties": {
+            "inventoryId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "cycleId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "cycle": {
+              "$ref": "#/components/schemas/Cycle"
+            },
+            "stockQuantity": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "reorderThreshold": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "warehouseLocation": {
+              "type": "string",
+              "nullable": true
+            },
+            "lastStockUpdate": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "additionalProperties": false
+        },
+        "InventoryHistory": {
+          "type": "object",
+          "properties": {
+            "historyId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "cycleId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "cycle": {
+              "$ref": "#/components/schemas/Cycle"
+            },
+            "previousQuantity": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "newQuantity": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "changeReason": {
+              "type": "string",
+              "nullable": true
+            },
+            "orderId": {
+              "type": "string",
+              "format": "uuid",
+              "nullable": true
+            },
+            "order": {
+              "$ref": "#/components/schemas/Order"
+            },
+            "userId": {
+              "type": "string",
+              "format": "uuid",
+              "nullable": true
+            },
+            "user": {
+              "$ref": "#/components/schemas/User"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "additionalProperties": false
+        },
+        "Order": {
+          "required": [
+            "orderNumber"
+          ],
+          "type": "object",
+          "properties": {
+            "orderId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "orderNumber": {
+              "maxLength": 20,
+              "minLength": 1,
+              "type": "string"
+            },
+            "employeeId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "employee": {
+              "$ref": "#/components/schemas/User"
+            },
+            "customerId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "customer": {
+              "$ref": "#/components/schemas/Customer"
+            },
+            "shippingAddressId": {
+              "type": "string",
+              "format": "uuid",
+              "nullable": true
+            },
+            "shippingAddress": {
+              "$ref": "#/components/schemas/Address"
+            },
+            "orderDate": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "status": {
+              "$ref": "#/components/schemas/OrderStatus"
+            },
+            "subtotal": {
+              "type": "number",
+              "format": "double"
+            },
+            "tax": {
+              "type": "number",
+              "format": "double"
+            },
+            "discount": {
+              "type": "number",
+              "format": "double"
+            },
+            "totalAmount": {
+              "type": "number",
+              "format": "double"
+            },
+            "notes": {
+              "type": "string",
+              "nullable": true
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "orderItems": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/OrderItem"
+              },
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "OrderItem": {
+          "type": "object",
+          "properties": {
+            "orderItemId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "orderId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "order": {
+              "$ref": "#/components/schemas/Order"
+            },
+            "cycleId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "cycle": {
+              "$ref": "#/components/schemas/Cycle"
+            },
+            "quantity": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "unitPrice": {
+              "type": "number",
+              "format": "double"
+            },
+            "taxRate": {
+              "type": "number",
+              "format": "double"
+            },
+            "totalPrice": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          "additionalProperties": false
+        },
+        "OrderStatus": {
+          "enum": [
+            "pending",
+            "processing",
+            "completed",
+            "cancelled",
+            "refunded"
+          ],
+          "type": "string"
+        },
+        "Payment": {
+          "type": "object",
+          "properties": {
+            "paymentId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "orderId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "order": {
+              "$ref": "#/components/schemas/Order"
+            },
+            "paymentType": {
+              "$ref": "#/components/schemas/PaymentType"
+            },
+            "stripePaymentId": {
+              "type": "string",
+              "nullable": true
+            },
+            "amount": {
+              "type": "number",
+              "format": "double"
+            },
+            "status": {
+              "$ref": "#/components/schemas/PaymentStatus"
+            },
+            "receiptUrl": {
+              "type": "string",
+              "nullable": true
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          "additionalProperties": false
+        },
+        "PaymentStatus": {
+          "enum": [
+            "requires_payment",
+            "requires_confirmation",
+            "succeeded",
+            "failed"
+          ],
+          "type": "string"
+        },
+        "PaymentType": {
+          "enum": [
+            "cash",
+            "stripe"
+          ],
+          "type": "string"
+        },
+        "ProcessPaymentRequestDTO": {
+          "type": "object",
+          "properties": {
+            "orderId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "amount": {
+              "type": "number",
+              "format": "double"
+            },
+            "paymentType": {
+              "$ref": "#/components/schemas/PaymentType"
+            },
+            "stripePaymentId": {
+              "type": "string",
+              "nullable": true
+            },
+            "receiptUrl": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "RefundPaymentRequestDTO": {
+          "type": "object",
+          "properties": {
+            "reason": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "StockUpdateRequestDTO": {
+          "type": "object",
+          "properties": {
+            "quantityChange": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "additionalProperties": false
+        },
+        "UpdateCycleDTO": {
+          "type": "object",
+          "properties": {
+            "sku": {
+              "type": "string",
+              "nullable": true
+            },
+            "modelName": {
+              "type": "string",
+              "nullable": true
+            },
+            "brandId": {
+              "type": "string",
+              "format": "uuid",
+              "nullable": true
+            },
+            "typeId": {
+              "type": "string",
+              "format": "uuid",
+              "nullable": true
+            },
+            "description": {
+              "type": "string",
+              "nullable": true
+            },
+            "price": {
+              "type": "number",
+              "format": "double",
+              "nullable": true
+            },
+            "costPrice": {
+              "type": "number",
+              "format": "double",
+              "nullable": true
+            },
+            "isActive": {
+              "type": "boolean",
+              "nullable": true
+            },
+            "imageUrl": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "UpdateOrderRequestDTO": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "$ref": "#/components/schemas/OrderStatus"
+            },
+            "shippingAddressId": {
+              "type": "string",
+              "format": "uuid",
+              "nullable": true
+            },
+            "discount": {
+              "type": "number",
+              "format": "double"
+            },
+            "notes": {
+              "type": "string",
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "UpdateOrderStatusRequest": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "$ref": "#/components/schemas/OrderStatus"
+            }
+          },
+          "additionalProperties": false
+        },
+        "UpdatePaymentStatusRequestDTO": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "$ref": "#/components/schemas/PaymentStatus"
+            }
+          },
+          "additionalProperties": false
+        },
+        "UpdateUserRequestDTO": {
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string",
+              "nullable": true
+            },
+            "email": {
+              "type": "string",
+              "nullable": true
+            },
+            "role": {
+              "$ref": "#/components/schemas/UserRole"
+            },
+            "isActive": {
+              "type": "boolean",
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "User": {
+          "type": "object",
+          "properties": {
+            "userId": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "username": {
+              "type": "string",
+              "nullable": true
+            },
+            "email": {
+              "type": "string",
+              "nullable": true
+            },
+            "passwordHash": {
+              "type": "string",
+              "nullable": true
+            },
+            "role": {
+              "$ref": "#/components/schemas/UserRole"
+            },
+            "isActive": {
+              "type": "boolean"
+            },
+            "lastLogin": {
+              "type": "string",
+              "format": "date-time",
+              "nullable": true
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "deletedAt": {
+              "type": "string",
+              "format": "date-time",
+              "nullable": true
+            }
+          },
+          "additionalProperties": false
+        },
+        "UserRole": {
+          "enum": [
+            "admin",
+            "employee"
+          ],
+          "type": "string"
+        }
+      },
+      "securitySchemes": {
+        "Bearer": {
+          "type": "apiKey",
+          "description": "JWT Authorization header using the Bearer scheme. Example: 'Bearer {token}'",
+          "name": "Authorization",
+          "in": "header"
+        }
+      }
+    },
+    "security": [
+      {
+        "Bearer": [ ]
+      }
+    ]
+  }
