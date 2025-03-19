@@ -26,13 +26,11 @@ namespace CycleShopAPI.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Configure Enums
             modelBuilder.HasPostgresEnum<UserRole>();
             modelBuilder.HasPostgresEnum<OrderStatus>();
             modelBuilder.HasPostgresEnum<PaymentStatus>();
             modelBuilder.HasPostgresEnum<PaymentType>();
 
-            // Configure constraints
             modelBuilder.Entity<User>(entity =>
             {
                 entity.Property(u => u.CreatedAt).HasDefaultValueSql("NOW()");
@@ -52,11 +50,11 @@ namespace CycleShopAPI.Data
 
             modelBuilder.Entity<OrderItem>(entity =>
             {
-                entity.Property(oi => oi.UnitPrice).HasColumnType("decimal(10,2)");
+                entity.Property(oi => oi.PriceSnapshot).HasColumnType("decimal(10,2)");
                 entity.Property(oi => oi.TotalPrice)
                     .HasColumnType("decimal(10,2)")
-                    .HasComputedColumnSql("\"Quantity\" * \"UnitPrice\"", stored: true);
-
+                    .HasComputedColumnSql("\"Quantity\" * \"PriceSnapshot\"", stored: true);
+                entity.ToTable(tb => tb.HasTrigger("order_item_inventory_update"));
             });
 
             modelBuilder.Entity<Customer>(entity =>
@@ -68,7 +66,6 @@ namespace CycleShopAPI.Data
 
             modelBuilder.Entity<CycleType>().HasKey(ct => ct.CycleTypeId);
 
-            // Configure relationships
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.Employee)
                 .WithMany()
@@ -110,7 +107,6 @@ namespace CycleShopAPI.Data
                 .WithMany()
                 .HasForeignKey(p => p.OrderId);
 
-            // Inventory
             modelBuilder.Entity<Inventory>(entity =>
             {
                 entity.HasKey(i => i.InventoryId);
@@ -134,7 +130,6 @@ namespace CycleShopAPI.Data
 
 
 
-            // Soft Delete Query Filters
             modelBuilder.Entity<User>().HasQueryFilter(u => u.DeletedAt == null);
             modelBuilder.Entity<Cycle>().HasQueryFilter(c => c.DeletedAt == null);
             modelBuilder.Entity<Customer>().HasQueryFilter(c => c.DeletedAt == null);

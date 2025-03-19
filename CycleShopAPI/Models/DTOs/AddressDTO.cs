@@ -19,7 +19,6 @@ namespace CycleShopAPI.Models.DTOs
         [Required, MaxLength(20)]
         public string PostalCode { get; set; }
 
-        [Required, MaxLength(50)]
-        public string Country { get; set; } = "India";
+        public string? Country { get; set; } = "India";
     }
 }

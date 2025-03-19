@@ -3,21 +3,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CycleShopAPI.Models
 {
-    public class OrderItem
+    public class OrderItemDTO
     {
         public Guid OrderItemId { get; set; }
         [ForeignKey("Order")]
         public Guid OrderId { get; set; }
-        public Order Order { get; set; }
         [ForeignKey("Cycle")]
         public Guid CycleId { get; set; }
-        public Cycle Cycle { get; set; }
         public int Quantity { get; set; }
-        [Column(TypeName = "numeric(10,2)")]
-        public decimal PriceSnapshot { get; set; } // Price of the cycle at order time
         [Column(TypeName = "numeric(5,2)")]
         public decimal TaxRate { get; set; } = 0;
-        [Column(TypeName = "numeric(10,2)")]
-        public decimal TotalPrice { get; set; }
     }
 }

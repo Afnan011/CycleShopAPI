@@ -3,6 +3,7 @@ using System;
 using CycleShopAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CycleShopAPI.Migrations
 {
     [DbContext(typeof(CycleShopContext))]
-    partial class CycleShopContextModelSnapshot : ModelSnapshot
+    [Migration("20250319063255_RenameUnitPriceToPriceSnapshot")]
+    partial class RenameUnitPriceToPriceSnapshot
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

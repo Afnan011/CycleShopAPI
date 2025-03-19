@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using CycleShopAPI.Models.DTOs;
 
 namespace CycleShopAPI.Models
 {

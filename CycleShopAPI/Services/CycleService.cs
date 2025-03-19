@@ -50,7 +50,6 @@ namespace CycleShopAPI.Services
 
         public async Task<Cycle> CreateCycleAsync(Cycle cycle)
         {
-            // Generate SKU if not provided
             if (string.IsNullOrEmpty(cycle.SKU))
             {
                 cycle.SKU = await GenerateSKUAsync(cycle.BrandId, cycle.TypeId);
@@ -71,14 +70,12 @@ namespace CycleShopAPI.Services
             if (brand == null || cycleType == null)
                 throw new InvalidOperationException("Invalid brand or cycle type");
 
-            // Get brand prefix (first 3 letters)
             string brandPrefix = brand.Name.Substring(0, Math.Min(3, brand.Name.Length)).ToUpper();
 
-            // Get type prefix (first 3 letters)
             string typePrefix = cycleType.Name.Replace(" ", "").Substring(0, Math.Min(3, cycleType.Name.Replace(" ", "").Length)).ToUpper();
 
-            // Get count of existing cycles for this brand and type
             int count = await _context.Cycles
+                .IgnoreQueryFilters()
                 .Where(c => c.BrandId == brandId && c.TypeId == typeId)
                 .CountAsync();
 

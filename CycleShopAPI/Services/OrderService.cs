@@ -53,74 +53,65 @@ namespace CycleShopAPI.Services
                 .ToListAsync();
         }
 
-        public async Task<Order> CreateOrderAsync(Order order, List<OrderItem> items)
+        public async Task<Order> CreateOrderAsync(Order order, List<OrderItemDTO> itemDtos)
         {
             using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
-                    // Generate a unique order number
-                    string orderNumber = GenerateOrderNumber();
-                    order.OrderNumber = orderNumber;
+                    order.OrderNumber = GenerateOrderNumber();
                     order.OrderDate = DateTime.UtcNow;
                     order.Status = OrderStatus.pending;
                     order.CreatedAt = DateTime.UtcNow;
                     order.UpdatedAt = DateTime.UtcNow;
 
-                    // Check if customer exists
                     var customer = await _context.Customers.FindAsync(order.CustomerId);
                     if (customer == null)
                     {
                         throw new InvalidOperationException($"Customer with ID {order.CustomerId} does not exist");
                     }
 
-                    // Check if employee exists
                     var employee = await _context.Users.FindAsync(order.EmployeeId);
                     if (employee == null)
                     {
                         throw new InvalidOperationException($"Employee with ID {order.EmployeeId} does not exist");
                     }
 
-                    // Add the order
                     await _context.Orders.AddAsync(order);
                     await _context.SaveChangesAsync();
 
-                    // Calculate order totals
                     decimal subtotal = 0;
-                    foreach (var item in items)
+                    foreach (var dto in itemDtos)
                     {
-                        // Check if cycle exists and get its price
-                        var cycle = await _context.Cycles.FindAsync(item.CycleId);
+                        var cycle = await _context.Cycles.FindAsync(dto.CycleId);
                         if (cycle == null)
                         {
-                            throw new InvalidOperationException($"Cycle with ID {item.CycleId} does not exist");
+                            throw new InvalidOperationException($"Cycle with ID {dto.CycleId} does not exist");
                         }
 
-                        // Check inventory availability
-                        var inventory = await _inventoryService.GetInventoryByCycleIdAsync(item.CycleId);
-                        if (inventory == null || inventory.StockQuantity < item.Quantity)
+                        var inventory = await _inventoryService.GetInventoryByCycleIdAsync(dto.CycleId);
+                        if (inventory == null || inventory.StockQuantity < dto.Quantity)
                         {
                             throw new InvalidOperationException($"Not enough stock for cycle {cycle.ModelName}. Available: {inventory?.StockQuantity ?? 0}");
                         }
 
-                        // Set order item properties
-                        item.OrderId = order.OrderId;
-                        item.UnitPrice = cycle.Price;
-                        item.TotalPrice = item.UnitPrice * item.Quantity;
+                        var orderItem = new OrderItem
+                        {
+                            OrderId = order.OrderId,
+                            CycleId = dto.CycleId,
+                            Quantity = dto.Quantity < 1 ? throw new InvalidOperationException("Quantity must be at least 1") : dto.Quantity,
+                            TaxRate = dto.TaxRate,
+                            PriceSnapshot = cycle.Price
+                        };
+                        orderItem.TotalPrice = orderItem.PriceSnapshot * orderItem.Quantity;
                         
-                        // Add the order item
-                        await _context.OrderItems.AddAsync(item);
+                        await _context.OrderItems.AddAsync(orderItem);
                         
-                        // Update inventory by reducing stock
-                        await _inventoryService.UpdateStockQuantityAsync(item.CycleId, -item.Quantity);
-                        
-                        subtotal += item.TotalPrice;
+                        subtotal += orderItem.TotalPrice;
                     }
 
-                    // Update order with calculated totals
                     order.Subtotal = subtotal;
-                    // Assuming tax is calculated as a percentage of the subtotal
-                    order.Tax = Math.Round(subtotal * 0.1m, 2); // 10% tax rate example
+                    order.Tax = Math.Round(subtotal * 0.1m, 2);         // 10% tax rate
                     order.TotalAmount = order.Subtotal + order.Tax - order.Discount;
                     
                     _context.Orders.Update(order);
@@ -145,7 +136,6 @@ namespace CycleShopAPI.Services
                 return false;
             }
 
-            // Update order properties
             existingOrder.Status = order.Status;
             existingOrder.ShippingAddressId = order.ShippingAddressId;
             existingOrder.Discount = order.Discount;
@@ -165,7 +155,6 @@ namespace CycleShopAPI.Services
                 return false;
             }
 
-            // Only allow certain status transitions
             switch (order.Status)
             {
                 case OrderStatus.pending when status == OrderStatus.processing:
@@ -177,7 +166,7 @@ namespace CycleShopAPI.Services
                     _context.Orders.Update(order);
                     return await _context.SaveChangesAsync() > 0;
                 default:
-                    return false; // Invalid status transition
+                    return false;
             }
         }
 
@@ -191,25 +180,17 @@ namespace CycleShopAPI.Services
                         .Include(o => o.OrderItems)
                         .FirstOrDefaultAsync(o => o.OrderId == orderId);
 
-                    if (order == null)
+                    if (order == null || 
+                        (order.Status != OrderStatus.pending && order.Status != OrderStatus.processing))
                     {
                         return false;
                     }
 
-                    // Only allow cancellation if the order is pending or processing
-                    if (order.Status != OrderStatus.pending && order.Status != OrderStatus.processing)
-                    {
-                        return false;
-                    }
-
-                    // Restore inventory for each order item
                     foreach (var item in order.OrderItems)
                     {
-                        // Return items to inventory
                         await _inventoryService.UpdateStockQuantityAsync(item.CycleId, item.Quantity);
                     }
 
-                    // Update order status to cancelled
                     order.Status = OrderStatus.cancelled;
                     order.UpdatedAt = DateTime.UtcNow;
 
@@ -219,7 +200,7 @@ namespace CycleShopAPI.Services
 
                     return true;
                 }
-                catch (Exception)
+                catch
                 {
                     await transaction.RollbackAsync();
                     throw;
@@ -238,10 +219,8 @@ namespace CycleShopAPI.Services
                 return false;
             }
 
-            // Only allow deletion if the order is cancelled
             if (order.Status != OrderStatus.cancelled)
             {
-                // Call cancel order first if it is not already cancelled
                 bool cancelled = await CancelOrderAsync(orderId);
                 if (!cancelled)
                 {
@@ -249,10 +228,7 @@ namespace CycleShopAPI.Services
                 }
             }
 
-            // Remove order items first
             _context.OrderItems.RemoveRange(order.OrderItems);
-            
-            // Then remove the order
             _context.Orders.Remove(order);
             
             return await _context.SaveChangesAsync() > 0;
@@ -284,15 +260,11 @@ namespace CycleShopAPI.Services
             return total;
         }
 
-        // Helper methods
         private string GenerateOrderNumber()
         {
-            // Generate a unique order number with year-month-sequential format
-            // e.g., 2024070001
             var now = DateTime.UtcNow;
             string yearMonth = now.ToString("yyyyMM");
             
-            // Get the last order number with this prefix
             var lastOrder = _context.Orders
                 .Where(o => o.OrderNumber.StartsWith(yearMonth))
                 .OrderByDescending(o => o.OrderNumber)

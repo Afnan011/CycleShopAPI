@@ -68,19 +68,17 @@ namespace CycleShopAPI.Controllers
         [Authorize(Roles = "admin")]
         public async Task<ActionResult<Cycle>> CreateCycle(CreateCycleDTO createCycleDto)
         {
-            // Validate brand exists
             var brand = await _brandService.GetBrandByIdAsync(createCycleDto.BrandId);
             if (brand == null)
                 return BadRequest("Invalid brand ID");
 
-            // Validate cycle type exists
             var cycleType = await _cycleTypeService.GetCycleTypeByIdAsync(createCycleDto.TypeId);
             if (cycleType == null)
                 return BadRequest("Invalid cycle type ID");
 
             var cycle = new Cycle
             {
-                SKU = createCycleDto.SKU,  // This can be null/empty now, service will generate it
+                SKU = createCycleDto.SKU,  
                 ModelName = createCycleDto.ModelName,
                 BrandId = createCycleDto.BrandId,
                 TypeId = createCycleDto.TypeId,
@@ -99,45 +97,23 @@ namespace CycleShopAPI.Controllers
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateCycle(Guid id, UpdateCycleDTO updateCycleDto)
         {
+
+            if (updateCycleDto == null)
+                return BadRequest("Request cannot be null");
+
             var existingCycle = await _cycleService.GetCycleByIdAsync(id);
             if (existingCycle == null)
                 return NotFound();
 
-            // Validate brand if provided
-            if (updateCycleDto.BrandId.HasValue)
-            {
-                var brand = await _brandService.GetBrandByIdAsync(updateCycleDto.BrandId.Value);
-                if (brand == null)
-                    return BadRequest("Invalid brand ID");
-            }
-
-            // Validate cycle type if provided
-            if (updateCycleDto.TypeId.HasValue)
-            {
-                var cycleType = await _cycleTypeService.GetCycleTypeByIdAsync(updateCycleDto.TypeId.Value);
-                if (cycleType == null)
-                    return BadRequest("Invalid cycle type ID");
-            }
-
-            // Update fields if provided
-            if (!string.IsNullOrEmpty(updateCycleDto.SKU))
-                existingCycle.SKU = updateCycleDto.SKU;
-            if (!string.IsNullOrEmpty(updateCycleDto.ModelName))
-                existingCycle.ModelName = updateCycleDto.ModelName;
-            if (updateCycleDto.BrandId.HasValue)
-                existingCycle.BrandId = updateCycleDto.BrandId.Value;
-            if (updateCycleDto.TypeId.HasValue)
-                existingCycle.TypeId = updateCycleDto.TypeId.Value;
-            if (updateCycleDto.Description != null)
-                existingCycle.Description = updateCycleDto.Description;
-            if (updateCycleDto.Price.HasValue)
-                existingCycle.Price = updateCycleDto.Price.Value;
-            if (updateCycleDto.CostPrice.HasValue)
-                existingCycle.CostPrice = updateCycleDto.CostPrice;
-            if (updateCycleDto.IsActive.HasValue)
-                existingCycle.IsActive = updateCycleDto.IsActive.Value;
-            if (!string.IsNullOrEmpty(updateCycleDto.ImageUrl))
-                existingCycle.ImageUrl = updateCycleDto.ImageUrl;
+            existingCycle.SKU = updateCycleDto.SKU ?? existingCycle.SKU;
+            existingCycle.ModelName = updateCycleDto.ModelName ?? existingCycle.ModelName;
+            existingCycle.BrandId = updateCycleDto.BrandId ?? existingCycle.BrandId;
+            existingCycle.TypeId = updateCycleDto.TypeId ?? existingCycle.TypeId;
+            existingCycle.Description = updateCycleDto.Description ?? existingCycle.Description;
+            existingCycle.Price = updateCycleDto.Price ?? existingCycle.Price;
+            existingCycle.CostPrice = updateCycleDto.CostPrice ?? existingCycle.CostPrice;
+            existingCycle.IsActive = updateCycleDto.IsActive ?? existingCycle.IsActive;
+            existingCycle.ImageUrl = updateCycleDto.ImageUrl ?? existingCycle.ImageUrl;
 
             var updatedCycle = await _cycleService.UpdateCycleAsync(id, existingCycle);
             if (updatedCycle == null)

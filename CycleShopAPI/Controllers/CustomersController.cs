@@ -51,7 +51,6 @@ namespace CycleShopAPI.Controllers
                 Phone = createCustomerDto.Phone
             };
 
-            // Create billing address if provided
             if (createCustomerDto.BillingAddress != null)
             {
                 var billingAddress = new Address
@@ -61,12 +60,11 @@ namespace CycleShopAPI.Controllers
                     City = createCustomerDto.BillingAddress.City,
                     State = createCustomerDto.BillingAddress.State,
                     PostalCode = createCustomerDto.BillingAddress.PostalCode,
-                    Country = createCustomerDto.BillingAddress.Country
+                    Country = createCustomerDto.BillingAddress.Country!
                 };
                 customer.BillingAddress = billingAddress;
             }
 
-            // Create shipping address if provided
             if (createCustomerDto.ShippingAddress != null)
             {
                 var shippingAddress = new Address
@@ -76,7 +74,7 @@ namespace CycleShopAPI.Controllers
                     City = createCustomerDto.ShippingAddress.City,
                     State = createCustomerDto.ShippingAddress.State,
                     PostalCode = createCustomerDto.ShippingAddress.PostalCode,
-                    Country = createCustomerDto.ShippingAddress.Country
+                    Country = createCustomerDto.ShippingAddress.Country!
                 };
                 customer.ShippingAddress = shippingAddress;
             }
@@ -87,45 +85,43 @@ namespace CycleShopAPI.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "admin,employee")]
-        public async Task<IActionResult> UpdateCustomer(Guid id, CreateCustomerDTO updateCustomerDto)
+        public async Task<IActionResult> UpdateCustomer(Guid id, UpdateCustomerDTO updateCustomerDto)
         {
             var existingCustomer = await _customerService.GetCustomerByIdAsync(id);
             if (existingCustomer == null)
                 return NotFound();
 
-            existingCustomer.FirstName = updateCustomerDto.FirstName;
-            existingCustomer.LastName = updateCustomerDto.LastName;
-            existingCustomer.Email = updateCustomerDto.Email;
-            existingCustomer.Phone = updateCustomerDto.Phone;
+            existingCustomer.FirstName = updateCustomerDto.FirstName ?? existingCustomer.FirstName;
+            existingCustomer.LastName = updateCustomerDto.LastName ?? existingCustomer.LastName;
+            existingCustomer.Email = updateCustomerDto.Email ?? existingCustomer.Email;
+            existingCustomer.Phone = updateCustomerDto.Phone ?? existingCustomer.Phone;
 
-            // Update billing address
             if (updateCustomerDto.BillingAddress != null)
             {
                 if (existingCustomer.BillingAddress == null)
                 {
                     existingCustomer.BillingAddress = new Address();
                 }
-                existingCustomer.BillingAddress.StreetLine1 = updateCustomerDto.BillingAddress.StreetLine1;
-                existingCustomer.BillingAddress.StreetLine2 = updateCustomerDto.BillingAddress.StreetLine2;
-                existingCustomer.BillingAddress.City = updateCustomerDto.BillingAddress.City;
-                existingCustomer.BillingAddress.State = updateCustomerDto.BillingAddress.State;
-                existingCustomer.BillingAddress.PostalCode = updateCustomerDto.BillingAddress.PostalCode;
-                existingCustomer.BillingAddress.Country = updateCustomerDto.BillingAddress.Country;
+                existingCustomer.BillingAddress.StreetLine1 = updateCustomerDto.BillingAddress.StreetLine1 ?? existingCustomer.BillingAddress.StreetLine1;
+                existingCustomer.BillingAddress.StreetLine2 = updateCustomerDto.BillingAddress.StreetLine2 ?? existingCustomer.BillingAddress.StreetLine2;
+                existingCustomer.BillingAddress.City = updateCustomerDto.BillingAddress.City ?? existingCustomer.BillingAddress.City;
+                existingCustomer.BillingAddress.State = updateCustomerDto.BillingAddress.State ?? existingCustomer.BillingAddress.State;
+                existingCustomer.BillingAddress.PostalCode = updateCustomerDto.BillingAddress.PostalCode ?? existingCustomer.BillingAddress.PostalCode;
+                existingCustomer.BillingAddress.Country = updateCustomerDto.BillingAddress.Country ?? existingCustomer.BillingAddress.Country;
             }
 
-            // Update shipping address
             if (updateCustomerDto.ShippingAddress != null)
             {
                 if (existingCustomer.ShippingAddress == null)
                 {
                     existingCustomer.ShippingAddress = new Address();
                 }
-                existingCustomer.ShippingAddress.StreetLine1 = updateCustomerDto.ShippingAddress.StreetLine1;
-                existingCustomer.ShippingAddress.StreetLine2 = updateCustomerDto.ShippingAddress.StreetLine2;
-                existingCustomer.ShippingAddress.City = updateCustomerDto.ShippingAddress.City;
-                existingCustomer.ShippingAddress.State = updateCustomerDto.ShippingAddress.State;
-                existingCustomer.ShippingAddress.PostalCode = updateCustomerDto.ShippingAddress.PostalCode;
-                existingCustomer.ShippingAddress.Country = updateCustomerDto.ShippingAddress.Country;
+                existingCustomer.ShippingAddress.StreetLine1 = updateCustomerDto.ShippingAddress.StreetLine1 ?? existingCustomer.ShippingAddress.StreetLine1;
+                existingCustomer.ShippingAddress.StreetLine2 = updateCustomerDto.ShippingAddress.StreetLine2 ?? existingCustomer.ShippingAddress.StreetLine2;
+                existingCustomer.ShippingAddress.City = updateCustomerDto.ShippingAddress.City ?? existingCustomer.ShippingAddress.City;
+                existingCustomer.ShippingAddress.State = updateCustomerDto.ShippingAddress.State ?? existingCustomer.ShippingAddress.State;
+                existingCustomer.ShippingAddress.PostalCode = updateCustomerDto.ShippingAddress.PostalCode ?? existingCustomer.ShippingAddress.PostalCode;
+                existingCustomer.ShippingAddress.Country = updateCustomerDto.ShippingAddress.Country ?? existingCustomer.ShippingAddress.Country;
             }
 
             var updatedCustomer = await _customerService.UpdateCustomerAsync(id, existingCustomer);

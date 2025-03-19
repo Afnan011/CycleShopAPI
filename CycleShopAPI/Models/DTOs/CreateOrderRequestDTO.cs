@@ -4,9 +4,8 @@
     {
         public Guid CustomerId { get; set; }
         public Guid EmployeeId { get; set; }
-        public Guid? ShippingAddressId { get; set; }
-        public decimal Discount { get; set; } = 0;
-        public string Notes { get; set; }
-        public List<OrderItem> Items { get; set; } = new List<OrderItem>();
+        public decimal? Discount { get; set; } = 0;
+        public string? Notes { get; set; }
+        public List<OrderItemDTO> Items { get; set; } = new List<OrderItemDTO>();
     }
 }

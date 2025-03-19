@@ -11,7 +11,7 @@ namespace CycleShopAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize] // Requires authentication for all endpoints
+    [Authorize] 
     public class OrdersController : ControllerBase
     {
         private readonly IOrderService _orderService;
@@ -59,13 +59,12 @@ namespace CycleShopAPI.Controllers
                 {
                     CustomerId = request.CustomerId,
                     EmployeeId = request.EmployeeId,
-                    ShippingAddressId = request.ShippingAddressId,
-                    Discount = request.Discount,
-                    Notes = request.Notes
+                    Discount = request.Discount ?? 0,
+                    Notes = request.Notes ?? string.Empty,
                 };
 
-                var createdOrder = await _orderService.CreateOrderAsync(order, request.Items);
-                return CreatedAtAction(nameof(GetOrder), new { id = createdOrder.OrderId }, createdOrder);
+                await _orderService.CreateOrderAsync(order, request.Items);
+                return CreatedAtAction(nameof(GetOrder), new { id = order.OrderId }, order);
             }
             catch (InvalidOperationException ex)
             {
