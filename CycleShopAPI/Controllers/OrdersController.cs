@@ -1,8 +1,10 @@
 using CycleShopAPI.Models;
 using CycleShopAPI.Models.DTOs;
 using CycleShopAPI.Services;
+using CycleShopAPI.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,10 +17,12 @@ namespace CycleShopAPI.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly IOrderService _orderService;
+        private readonly CycleShopContext _context;
 
-        public OrdersController(IOrderService orderService)
+        public OrdersController(IOrderService orderService, CycleShopContext context)
         {
             _orderService = orderService;
+            _context = context;
         }
 
         [HttpGet]
@@ -55,10 +59,20 @@ namespace CycleShopAPI.Controllers
         {
             try
             {
+                var customer = await _context.Customers
+                    .Include(c => c.ShippingAddress)
+                    .FirstOrDefaultAsync(c => c.CustomerId == request.CustomerId);
+
+                if (customer == null)
+                {
+                    return BadRequest("Customer not found");
+                }
+
                 var order = new Order
                 {
                     CustomerId = request.CustomerId,
                     EmployeeId = request.EmployeeId,
+                    ShippingAddressId = customer.ShippingAddressId,
                     Discount = request.Discount ?? 0,
                     Notes = request.Notes ?? string.Empty,
                 };
