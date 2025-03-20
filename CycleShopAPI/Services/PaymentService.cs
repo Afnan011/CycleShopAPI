@@ -40,34 +40,29 @@ namespace CycleShopAPI.Services
             {
                 try
                 {
-                    // Verify order exists
                     var order = await _context.Orders.FindAsync(payment.OrderId);
                     if (order == null)
                     {
                         throw new InvalidOperationException($"Order with ID {payment.OrderId} does not exist");
                     }
 
-                    // Set payment details
+                    payment.Amount = order.TotalAmount;
                     payment.CreatedAt = DateTime.UtcNow;
                     payment.UpdatedAt = DateTime.UtcNow;
                     payment.Status = payment.PaymentType == PaymentType.cash 
                         ? PaymentStatus.succeeded 
                         : PaymentStatus.requires_confirmation;
 
-                    // Set Stripe payment ID for non-cash payments if not provided
                     if (payment.PaymentType != PaymentType.cash && string.IsNullOrEmpty(payment.StripePaymentId))
                     {
                         payment.StripePaymentId = GenerateTransactionReference();
                     }
 
-                    // Save payment
                     await _context.Payments.AddAsync(payment);
                     await _context.SaveChangesAsync();
 
-                    // Update order status based on payment status
                     if (payment.Status == PaymentStatus.succeeded)
                     {
-                        // Successful payment moves order to processing
                         await _orderService.UpdateOrderStatusAsync(order.OrderId, OrderStatus.processing);
                     }
 
@@ -191,7 +186,6 @@ namespace CycleShopAPI.Services
         // Helper methods
         private string GenerateTransactionReference()
         {
-            // Generate a unique transaction reference
             return $"TXN{DateTime.UtcNow:yyyyMMddHHmmss}{Guid.NewGuid().ToString().Substring(0, 8).ToUpper()}";
         }
     }

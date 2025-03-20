@@ -127,7 +127,7 @@ namespace CycleShopAPI.Tests
         {
             // Arrange
             var customerId = Guid.NewGuid();
-            var updateRequest = new CreateCustomerDTO
+            var updateRequest = new UpdateCustomerDTO
             {
                 FirstName = "John Updated",
                 LastName = "Doe Updated",

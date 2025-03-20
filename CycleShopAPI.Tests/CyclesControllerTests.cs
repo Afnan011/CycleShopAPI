@@ -205,5 +205,86 @@ namespace CycleShopAPI.Tests
             Assert.That(okResult, Is.Not.Null);
             Assert.That(okResult!.Value, Is.EqualTo(expectedCycles));
         }
+
+        [Test]
+        public async Task CreateCycle_WithImageUrl_ReturnsCreatedCycle()
+        {
+            // Arrange
+            var createRequest = new CreateCycleDTO
+            {
+                ModelName = "NewModel",
+                BrandId = Guid.NewGuid(),
+                TypeId = Guid.NewGuid(),
+                Price = 999.99m,
+                CostPrice = 799.99m,
+                ImageUrl = "https://example.com/image.jpg"
+            };
+
+            var brand = new Brand { BrandId = createRequest.BrandId };
+            var cycleType = new CycleType { CycleTypeId = createRequest.TypeId };
+
+            _mockBrandService.Setup(s => s.GetBrandByIdAsync(createRequest.BrandId)).ReturnsAsync(brand);
+            _mockCycleTypeService.Setup(s => s.GetCycleTypeByIdAsync(createRequest.TypeId)).ReturnsAsync(cycleType);
+
+            var createdCycle = new Cycle
+            {
+                CycleId = Guid.NewGuid(),
+                ModelName = createRequest.ModelName,
+                BrandId = createRequest.BrandId,
+                TypeId = createRequest.TypeId,
+                Price = createRequest.Price,
+                CostPrice = createRequest.CostPrice,
+                ImageUrl = createRequest.ImageUrl
+            };
+
+            _mockCycleService.Setup(s => s.CreateCycleAsync(It.IsAny<Cycle>())).ReturnsAsync(createdCycle);
+
+            // Act
+            var result = await _controller.CreateCycle(createRequest);
+
+            // Assert
+            Assert.That(result.Result, Is.InstanceOf<CreatedAtActionResult>());
+            var createdResult = result.Result as CreatedAtActionResult;
+            Assert.That(createdResult, Is.Not.Null);
+            Assert.That(createdResult!.Value, Is.EqualTo(createdCycle));
+            var returnedCycle = createdResult.Value as Cycle;
+            Assert.That(returnedCycle!.ImageUrl, Is.EqualTo(createRequest.ImageUrl));
+        }
+
+        [Test]
+        public async Task UpdateCycle_WithImageUrl_ReturnsUpdatedCycle()
+        {
+            // Arrange
+            var cycleId = Guid.NewGuid();
+            var updateRequest = new UpdateCycleDTO
+            {
+                ModelName = "UpdatedModel",
+                Price = 1099.99m,
+                ImageUrl = "https://example.com/updated-image.jpg"
+            };
+
+            var existingCycle = new Cycle { CycleId = cycleId, ModelName = "OldModel" };
+            _mockCycleService.Setup(s => s.GetCycleByIdAsync(cycleId)).ReturnsAsync(existingCycle);
+            
+            var updatedCycle = new Cycle
+            {
+                CycleId = cycleId,
+                ModelName = updateRequest.ModelName,
+                Price = updateRequest.Price.Value,
+                ImageUrl = updateRequest.ImageUrl
+            };
+            _mockCycleService.Setup(s => s.UpdateCycleAsync(cycleId, It.IsAny<Cycle>())).ReturnsAsync(updatedCycle);
+
+            // Act
+            var result = await _controller.UpdateCycle(cycleId, updateRequest);
+
+            // Assert
+            Assert.That(result, Is.InstanceOf<OkObjectResult>());
+            var okResult = result as OkObjectResult;
+            Assert.That(okResult, Is.Not.Null);
+            Assert.That(okResult!.Value, Is.EqualTo(updatedCycle));
+            var returnedCycle = okResult.Value as Cycle;
+            Assert.That(returnedCycle!.ImageUrl, Is.EqualTo(updateRequest.ImageUrl));
+        }
     }
 }

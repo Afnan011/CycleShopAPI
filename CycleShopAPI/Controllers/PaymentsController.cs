@@ -11,7 +11,7 @@ namespace CycleShopAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize] // Requires authentication for all endpoints
+    [Authorize] 
     public class PaymentsController : ControllerBase
     {
         private readonly IPaymentService _paymentService;
@@ -50,12 +50,11 @@ namespace CycleShopAPI.Controllers
                 var payment = new Payment
                 {
                     OrderId = request.OrderId,
-                    Amount = request.Amount,
                     PaymentType = request.PaymentType,
-                    StripePaymentId = request.StripePaymentId,
-                    ReceiptUrl = request.ReceiptUrl
+                    StripePaymentId = request.StripePaymentId ?? String.Empty,
+                    ReceiptUrl = request.ReceiptUrl ?? String.Empty,
                 };
-                
+
                 var processedPayment = await _paymentService.ProcessPaymentAsync(payment);
                 return CreatedAtAction(nameof(GetPayment), new { id = processedPayment.PaymentId }, processedPayment);
             }

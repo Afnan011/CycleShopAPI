@@ -223,5 +223,109 @@ namespace CycleShopAPI.Tests
             Assert.That(okResult, Is.Not.Null);
             Assert.That(okResult!.Value, Is.EqualTo(expectedHistory));
         }
+
+        [Test]
+        public async Task GetInventoryHistory_WithUserTracking_ReturnsHistoryWithUsers()
+        {
+            // Arrange
+            var cycleId = Guid.NewGuid();
+            var userId = Guid.NewGuid();
+            var expectedHistory = new List<InventoryHistory>
+            {
+                new InventoryHistory 
+                { 
+                    HistoryId = Guid.NewGuid(), 
+                    CycleId = cycleId,
+                    PreviousQuantity = 10,
+                    NewQuantity = 15,
+                    ChangeReason = "Stock Update",
+                    UserId = userId,
+                    User = new User { UserId = userId, Username = "testuser" }
+                }
+            };
+            _mockInventoryService.Setup(s => s.GetInventoryHistoryAsync(cycleId))
+                                .ReturnsAsync(expectedHistory);
+
+            // Act
+            var result = await _controller.GetInventoryHistory(cycleId);
+
+            // Assert
+            Assert.That(result.Result, Is.InstanceOf<OkObjectResult>());
+            var okResult = result.Result as OkObjectResult;
+            Assert.That(okResult, Is.Not.Null);
+            var returnedHistory = okResult!.Value as List<InventoryHistory>;
+            Assert.That(returnedHistory, Is.Not.Null);
+            Assert.That(returnedHistory![0].UserId, Is.EqualTo(userId));
+            Assert.That(returnedHistory[0].User.Username, Is.EqualTo("testuser"));
+        }
+
+        [Test]
+        public async Task UpdateInventory_CreatesHistoryWithCurrentUser()
+        {
+            // Arrange
+            var inventoryId = Guid.NewGuid();
+            var userId = Guid.NewGuid();
+            var updateInventoryDto = new UpdateInventoryDTO
+            {
+                StockQuantity = 25,
+                ReorderThreshold = 10,
+                WarehouseLocation = "B2"
+            };
+
+            var inventoryHistory = new InventoryHistory
+            {
+                HistoryId = Guid.NewGuid(),
+                CycleId = Guid.NewGuid(),
+                PreviousQuantity = 20,
+                NewQuantity = updateInventoryDto.StockQuantity.Value,
+                ChangeReason = "Manual inventory update",
+                UserId = userId,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _mockInventoryService.Setup(s => s.UpdateInventoryAsync(inventoryId, updateInventoryDto))
+                                .ReturnsAsync(true);
+
+            // Act
+            var result = await _controller.UpdateInventory(inventoryId, updateInventoryDto);
+
+            // Assert
+            Assert.That(result, Is.InstanceOf<NoContentResult>());
+            _mockInventoryService.Verify(s => s.UpdateInventoryAsync(inventoryId, It.Is<UpdateInventoryDTO>(dto => 
+                dto.StockQuantity == updateInventoryDto.StockQuantity &&
+                dto.ReorderThreshold == updateInventoryDto.ReorderThreshold &&
+                dto.WarehouseLocation == updateInventoryDto.WarehouseLocation)), 
+                Times.Once);
+        }
+
+        [Test]
+        public async Task UpdateStock_CreatesHistoryWithCurrentUser()
+        {
+            // Arrange
+            var cycleId = Guid.NewGuid();
+            var userId = Guid.NewGuid();
+            var request = new StockUpdateRequestDTO { QuantityChange = 5 };
+            
+            var inventoryHistory = new InventoryHistory
+            {
+                HistoryId = Guid.NewGuid(),
+                CycleId = cycleId,
+                PreviousQuantity = 10,
+                NewQuantity = 15,
+                ChangeReason = request.QuantityChange > 0 ? "Stock added" : "Stock removed",
+                UserId = userId,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _mockInventoryService.Setup(s => s.UpdateStockQuantityAsync(cycleId, request.QuantityChange))
+                                .ReturnsAsync(true);
+
+            // Act
+            var result = await _controller.UpdateStock(cycleId, request);
+
+            // Assert
+            Assert.That(result, Is.InstanceOf<NoContentResult>());
+            _mockInventoryService.Verify(s => s.UpdateStockQuantityAsync(cycleId, request.QuantityChange), Times.Once);
+        }
     }
 }

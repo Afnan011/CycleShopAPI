@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CycleShopAPI.Data;
 
 namespace CycleShopAPI.Tests
 {
@@ -15,13 +16,15 @@ namespace CycleShopAPI.Tests
     public class OrdersControllerTests
     {
         private Mock<IOrderService> _mockOrderService = null!;
+        private Mock<CycleShopContext> _mockContext = null!;
         private OrdersController _controller = null!;
 
         [SetUp]
         public void Setup()
         {
             _mockOrderService = new Mock<IOrderService>();
-            _controller = new OrdersController(_mockOrderService.Object);
+            _mockContext = new Mock<CycleShopContext>();
+            _controller = new OrdersController(_mockOrderService.Object, _mockContext.Object);
         }
 
         [Test]
@@ -50,7 +53,15 @@ namespace CycleShopAPI.Tests
         {
             // Arrange
             var orderId = Guid.NewGuid();
-            var expectedOrder = new Order { OrderId = orderId, CustomerId = Guid.NewGuid() };
+            var expectedOrder = new Order 
+            { 
+                OrderId = orderId, 
+                CustomerId = Guid.NewGuid(),
+                OrderItems = new List<OrderItem>
+                {
+                    new OrderItem { PriceSnapshot = 999.99m, Quantity = 1 }
+                }
+            };
             _mockOrderService.Setup(s => s.GetOrderByIdAsync(orderId)).ReturnsAsync(expectedOrder);
 
             // Act
@@ -61,6 +72,8 @@ namespace CycleShopAPI.Tests
             var okResult = result.Result as OkObjectResult;
             Assert.That(okResult, Is.Not.Null);
             Assert.That(okResult!.Value, Is.EqualTo(expectedOrder));
+            var returnedOrder = okResult.Value as Order;
+            Assert.That(returnedOrder!.OrderItems.First().PriceSnapshot, Is.EqualTo(999.99m));
         }
 
         [Test]
@@ -93,11 +106,12 @@ namespace CycleShopAPI.Tests
             {
                 CustomerId = Guid.NewGuid(),
                 EmployeeId = Guid.NewGuid(),
-                ShippingAddressId = Guid.NewGuid(),
-                Items = new List<OrderItem>
-                {
-                    new OrderItem { CycleId = Guid.NewGuid(), Quantity = 1 }
-                }
+                Discount = 0m,
+                Notes = string.Empty,
+                Items = new List<OrderItemDTO>
+            {
+                new OrderItemDTO { CycleId = Guid.NewGuid(), Quantity = 1 }
+            }
             };
 
             var createdOrder = new Order
@@ -105,10 +119,18 @@ namespace CycleShopAPI.Tests
                 OrderId = Guid.NewGuid(),
                 CustomerId = createRequest.CustomerId,
                 EmployeeId = createRequest.EmployeeId,
-                ShippingAddressId = createRequest.ShippingAddressId
+                OrderItems = new List<OrderItem>
+            {
+                new OrderItem
+                {
+                    CycleId = createRequest.Items[0].CycleId,
+                    Quantity = createRequest.Items[0].Quantity,
+                    PriceSnapshot = 999.99m
+                }
+            }
             };
 
-            _mockOrderService.Setup(s => s.CreateOrderAsync(It.IsAny<Order>(), It.IsAny<List<OrderItem>>()))
+            _mockOrderService.Setup(s => s.CreateOrderAsync(It.IsAny<Order>(), It.IsAny<List<OrderItemDTO>>()))
                            .ReturnsAsync(createdOrder);
 
             // Act
@@ -119,6 +141,8 @@ namespace CycleShopAPI.Tests
             var createdResult = result.Result as CreatedAtActionResult;
             Assert.That(createdResult, Is.Not.Null);
             Assert.That(createdResult!.Value, Is.EqualTo(createdOrder));
+            var returnedOrder = createdResult.Value as Order;
+            Assert.That(returnedOrder!.OrderItems.First().PriceSnapshot, Is.EqualTo(999.99m));
         }
 
         [Test]
@@ -193,8 +217,13 @@ namespace CycleShopAPI.Tests
             var orderId = Guid.NewGuid();
             var expectedItems = new List<OrderItem>
             {
-                new OrderItem { OrderId = orderId, CycleId = Guid.NewGuid() },
-                new OrderItem { OrderId = orderId, CycleId = Guid.NewGuid() }
+                new OrderItem 
+                { 
+                    OrderId = orderId, 
+                    CycleId = Guid.NewGuid(), 
+                    PriceSnapshot = 999.99m,
+                    Quantity = 1
+                }
             };
             _mockOrderService.Setup(s => s.GetOrderItemsByOrderIdAsync(orderId)).ReturnsAsync(expectedItems);
 
@@ -209,12 +238,12 @@ namespace CycleShopAPI.Tests
         }
 
         [Test]
-        public async Task CalculateOrderTotal_ReturnsTotal()
+        public async Task CalculateOrderTotal_WithPriceSnapshot_ReturnsTotal()
         {
             // Arrange
             var items = new List<OrderItem>
             {
-                new OrderItem { CycleId = Guid.NewGuid(), Quantity = 2, UnitPrice = 100 }
+                new OrderItem { CycleId = Guid.NewGuid(), Quantity = 2, PriceSnapshot = 100m }
             };
             var expectedTotal = 200m;
             _mockOrderService.Setup(s => s.CalculateOrderTotalAsync(items)).ReturnsAsync(expectedTotal);
@@ -228,5 +257,39 @@ namespace CycleShopAPI.Tests
             Assert.That(okResult, Is.Not.Null);
             Assert.That(okResult!.Value, Is.EqualTo(expectedTotal));
         }
+
+        [Test]
+        public async Task GetOrderItems_ReturnsPriceSnapshots()
+        {
+            // Arrange
+            var orderId = Guid.NewGuid();
+            var cycleId = Guid.NewGuid();
+            var expectedItems = new List<OrderItem>
+            {
+                new OrderItem 
+                { 
+                    OrderItemId = Guid.NewGuid(),
+                    OrderId = orderId,
+                    CycleId = cycleId,
+                    Quantity = 2,
+                    PriceSnapshot = 799.99m,
+                    TotalPrice = 1599.98m
+                }
+            };
+            _mockOrderService.Setup(s => s.GetOrderItemsByOrderIdAsync(orderId)).ReturnsAsync(expectedItems);
+
+            // Act
+            var result = await _controller.GetOrderItems(orderId);
+
+            // Assert
+            Assert.That(result.Result, Is.InstanceOf<OkObjectResult>());
+            var okResult = result.Result as OkObjectResult;
+            Assert.That(okResult, Is.Not.Null);
+            Assert.That(okResult!.Value, Is.EqualTo(expectedItems));
+            var returnedItems = okResult.Value as List<OrderItem>;
+            Assert.That(returnedItems![0].PriceSnapshot, Is.EqualTo(799.99m));
+            Assert.That(returnedItems[0].TotalPrice, Is.EqualTo(1599.98m));
+        }
     }
+
 }
