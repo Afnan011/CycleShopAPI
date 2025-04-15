@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace CycleShopAPI.Controllers
@@ -163,5 +165,42 @@ namespace CycleShopAPI.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("get-ik-token")]
+        public IActionResult GetAuthenticationParameters()
+        {
+            DotNetEnv.Env.Load();
+            var privateKey = Environment.GetEnvironmentVariable("IMAGEKIT_PRIVATE_KEY");
+
+            if (string.IsNullOrEmpty(privateKey))
+            {
+                return BadRequest("ImageKit private key not configured.");
+            }
+
+            var token = Guid.NewGuid().ToString();
+            var expire = DateTimeOffset.UtcNow.AddMinutes(30).ToUnixTimeSeconds().ToString();
+
+            var signature = GenerateSignature(token + expire, privateKey);
+
+            return Ok(new
+            {
+                token,
+                expire,
+                signature
+            });
+        }
+
+        private string GenerateSignature(string data, string privateKey)
+        {
+            var keyBytes = Encoding.UTF8.GetBytes(privateKey);
+            var dataBytes = Encoding.UTF8.GetBytes(data);
+
+            using (var hmac = new HMACSHA1(keyBytes))
+            {
+                var hash = hmac.ComputeHash(dataBytes);
+                return BitConverter.ToString(hash).Replace("-", "").ToLower();
+            }
+        }
+
     }
 }
