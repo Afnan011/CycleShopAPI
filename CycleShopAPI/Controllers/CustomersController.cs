@@ -13,11 +13,16 @@ namespace CycleShopAPI.Controllers
     {
         private readonly ICustomerService _customerService;
         private readonly IAddressService _addressService;
+        private readonly ICustomerAddressService _customerAddressService;
 
-        public CustomersController(ICustomerService customerService, IAddressService addressService)
+        public CustomersController(
+            ICustomerService customerService, 
+            IAddressService addressService,
+            ICustomerAddressService customerAddressService)
         {
             _customerService = customerService;
             _addressService = addressService;
+            _customerAddressService = customerAddressService;
         }
 
         [HttpGet]
@@ -151,6 +156,76 @@ namespace CycleShopAPI.Controllers
                 return NotFound();
 
             return Ok(customer);
+        }
+
+        [HttpGet("{id}/addresses")]
+        [Authorize(Roles = "admin,employee")]
+        public async Task<ActionResult<IEnumerable<Address>>> GetCustomerAddresses(Guid id)
+        {
+            var customer = await _customerService.GetCustomerByIdAsync(id);
+            if (customer == null)
+                return NotFound("Customer not found");
+
+            var addresses = await _customerAddressService.GetAddressesByCustomerIdAsync(id);
+            return Ok(addresses);
+        }
+
+        [HttpPost("{id}/addresses")]
+        [Authorize(Roles = "admin,employee")]
+        public async Task<ActionResult<CustomerAddress>> AddCustomerAddress(Guid id, [FromBody] Address address, [FromQuery] bool isDefault = false)
+        {
+            var customer = await _customerService.GetCustomerByIdAsync(id);
+            if (customer == null)
+                return NotFound("Customer not found");
+
+            var customerAddress = await _customerAddressService.AddCustomerAddressAsync(id, address, isDefault);
+            return CreatedAtAction(nameof(GetCustomerAddresses), new { id }, customerAddress);
+        }
+
+        [HttpPut("{customerId}/addresses/{customerAddressId}")]
+        [Authorize(Roles = "admin,employee")]
+        public async Task<ActionResult<CustomerAddress>> UpdateCustomerAddress(Guid customerId, Guid customerAddressId, [FromBody] Address address)
+        {
+            var customerAddress = await _customerAddressService.GetCustomerAddressByIdAsync(customerAddressId);
+            if (customerAddress == null || customerAddress.CustomerId != customerId)
+                return NotFound("Address not found for this customer");
+
+            var updatedAddress = await _customerAddressService.UpdateCustomerAddressAsync(customerAddressId, address);
+            return Ok(updatedAddress);
+        }
+
+        [HttpDelete("{customerId}/addresses/{customerAddressId}")]
+        [Authorize(Roles = "admin,employee")]
+        public async Task<IActionResult> DeleteCustomerAddress(Guid customerId, Guid customerAddressId)
+        {
+            var customerAddress = await _customerAddressService.GetCustomerAddressByIdAsync(customerAddressId);
+            if (customerAddress == null || customerAddress.CustomerId != customerId)
+                return NotFound("Address not found for this customer");
+
+            var result = await _customerAddressService.DeleteCustomerAddressAsync(customerAddressId);
+            if (result)
+                return NoContent();
+
+            return BadRequest("Failed to delete address");
+        }
+
+        [HttpPut("{customerId}/addresses/{customerAddressId}/set-default")]
+        [Authorize(Roles = "admin,employee")]
+        public async Task<IActionResult> SetDefaultAddress(Guid customerId, Guid customerAddressId)
+        {
+            var customer = await _customerService.GetCustomerByIdAsync(customerId);
+            if (customer == null)
+                return NotFound("Customer not found");
+
+            var customerAddress = await _customerAddressService.GetCustomerAddressByIdAsync(customerAddressId);
+            if (customerAddress == null || customerAddress.CustomerId != customerId)
+                return NotFound("Address not found for this customer");
+
+            var result = await _customerAddressService.SetDefaultAddressAsync(customerId, customerAddressId);
+            if (result)
+                return NoContent();
+
+            return BadRequest("Failed to set address as default");
         }
     }
 }

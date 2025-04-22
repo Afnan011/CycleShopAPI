@@ -21,6 +21,7 @@ namespace CycleShopAPI.Data
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<InventoryHistory> InventoryHistories { get; set; }
+        public DbSet<CustomerAddress> CustomerAddresses { get; set; }
 
         //public DbSet<AuditLog> AuditLogs { get; set; }
 
@@ -126,11 +127,7 @@ namespace CycleShopAPI.Data
             modelBuilder.Entity<OrderItem>(entity =>
             {
                 entity.ToTable(tb => tb.HasTrigger("order_item_inventory_update"));
-            });
-
-
-
-            modelBuilder.Entity<User>().HasQueryFilter(u => u.DeletedAt == null);
+            });            modelBuilder.Entity<User>().HasQueryFilter(u => u.DeletedAt == null);
             modelBuilder.Entity<Cycle>().HasQueryFilter(c => c.DeletedAt == null);
             modelBuilder.Entity<Customer>().HasQueryFilter(c => c.DeletedAt == null);
             modelBuilder.Entity<Order>().HasQueryFilter(o => o.Customer.DeletedAt == null);
@@ -138,6 +135,7 @@ namespace CycleShopAPI.Data
             modelBuilder.Entity<Payment>().HasQueryFilter(p => p.Order.Customer.DeletedAt == null);
             modelBuilder.Entity<Inventory>().HasQueryFilter(i => i.Cycle.DeletedAt == null);
             modelBuilder.Entity<InventoryHistory>().HasQueryFilter(ih => ih.Cycle.DeletedAt == null);
+            modelBuilder.Entity<CustomerAddress>().HasQueryFilter(ca => ca.Customer.DeletedAt == null);
 
 
         }

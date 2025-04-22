@@ -70,6 +70,7 @@ namespace CycleShopAPI
             builder.Services.AddScoped<ICycleService, CycleService>();
             builder.Services.AddScoped<ICustomerService, CustomerService>();
             builder.Services.AddScoped<IAddressService, AddressService>();
+            builder.Services.AddScoped<ICustomerAddressService, CustomerAddressService>();
 
             builder.Services.AddControllers().AddJsonOptions(options =>
             {

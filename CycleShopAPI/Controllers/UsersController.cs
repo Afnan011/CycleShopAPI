@@ -99,12 +99,11 @@ namespace CycleShopAPI.Controllers
                 return NotFound();
 
             if (request == null)
-                return BadRequest("Request cannot be null");
-
-            existingUser.Username = request.Username ?? existingUser.Username;
+                return BadRequest("Request cannot be null");            existingUser.Username = request.Username ?? existingUser.Username;
             existingUser.Email = request.Email ?? existingUser.Email;
             existingUser.Role = request.Role ?? existingUser.Role;
             existingUser.IsActive = request.IsActive ?? existingUser.IsActive;
+            existingUser.ImageUrl = request.ImageUrl ?? existingUser.ImageUrl;
 
             try{
                 var result = await _userService.UpdateUserAsync(existingUser);
