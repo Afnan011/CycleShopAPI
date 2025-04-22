@@ -67,7 +67,7 @@ namespace CycleShopAPI.Migrations
 
                     b.HasKey("AddressId");
 
-                    b.ToTable("Addresses", (string)null);
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("CycleShopAPI.Models.Brand", b =>
@@ -92,7 +92,7 @@ namespace CycleShopAPI.Migrations
 
                     b.HasKey("BrandId");
 
-                    b.ToTable("Brands", (string)null);
+                    b.ToTable("Brands");
                 });
 
             modelBuilder.Entity("CycleShopAPI.Models.Customer", b =>
@@ -152,41 +152,7 @@ namespace CycleShopAPI.Migrations
 
                     b.HasIndex("ShippingAddressId");
 
-                    b.ToTable("Customers", (string)null);
-                });
-
-            modelBuilder.Entity("CycleShopAPI.Models.CustomerAddress", b =>
-                {
-                    b.Property<Guid>("CustomerAddressId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("AddressId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("AddressType")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsDefault")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("CustomerAddressId");
-
-                    b.HasIndex("AddressId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("CustomerAddresses", (string)null);
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("CycleShopAPI.Models.Cycle", b =>
@@ -249,7 +215,7 @@ namespace CycleShopAPI.Migrations
 
                     b.HasIndex("TypeId");
 
-                    b.ToTable("Cycles", null, t =>
+                    b.ToTable("Cycles", t =>
                         {
                             t.HasCheckConstraint("CK_Cycle_Price", "\"Price\" > 0");
                         });
@@ -273,7 +239,7 @@ namespace CycleShopAPI.Migrations
 
                     b.HasKey("CycleTypeId");
 
-                    b.ToTable("CycleTypes", (string)null);
+                    b.ToTable("CycleTypes");
                 });
 
             modelBuilder.Entity("CycleShopAPI.Models.Inventory", b =>
@@ -302,7 +268,7 @@ namespace CycleShopAPI.Migrations
 
                     b.HasIndex("CycleId");
 
-                    b.ToTable("Inventories", (string)null);
+                    b.ToTable("Inventories");
                 });
 
             modelBuilder.Entity("CycleShopAPI.Models.InventoryHistory", b =>
@@ -341,7 +307,7 @@ namespace CycleShopAPI.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("InventoryHistories", (string)null);
+                    b.ToTable("InventoryHistories");
                 });
 
             modelBuilder.Entity("CycleShopAPI.Models.Order", b =>
@@ -400,7 +366,7 @@ namespace CycleShopAPI.Migrations
 
                     b.HasIndex("ShippingAddressId");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("CycleShopAPI.Models.OrderItem", b =>
@@ -435,7 +401,7 @@ namespace CycleShopAPI.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderItems", null, t =>
+                    b.ToTable("OrderItems", t =>
                         {
                             t.HasTrigger("order_item_inventory_update");
                         });
@@ -477,7 +443,7 @@ namespace CycleShopAPI.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("Payments", (string)null);
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("CycleShopAPI.Models.User", b =>
@@ -496,9 +462,6 @@ namespace CycleShopAPI.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ImageUrl")
                         .HasColumnType("text");
 
                     b.Property<bool>("IsActive")
@@ -531,7 +494,7 @@ namespace CycleShopAPI.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("CycleShopAPI.Models.Customer", b =>
@@ -547,25 +510,6 @@ namespace CycleShopAPI.Migrations
                     b.Navigation("BillingAddress");
 
                     b.Navigation("ShippingAddress");
-                });
-
-            modelBuilder.Entity("CycleShopAPI.Models.CustomerAddress", b =>
-                {
-                    b.HasOne("CycleShopAPI.Models.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CycleShopAPI.Models.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Address");
-
-                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("CycleShopAPI.Models.Cycle", b =>

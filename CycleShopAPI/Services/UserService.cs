@@ -73,11 +73,12 @@ namespace CycleShopAPI.Services
             if (await _context.Users.AnyAsync(u => (u.Username == user.Username || u.Email == user.Email) && u.UserId != user.UserId))
             {
                 throw new InvalidOperationException("A user with this username or email already exists");
-            }            existingUser.Username = user.Username;
+            }
+
+            existingUser.Username = user.Username;
             existingUser.Email = user.Email;
             existingUser.Role = user.Role;
             existingUser.IsActive = user.IsActive;
-            existingUser.ImageUrl = user.ImageUrl;
             existingUser.UpdatedAt = DateTime.UtcNow;
 
             _context.Users.Update(existingUser);

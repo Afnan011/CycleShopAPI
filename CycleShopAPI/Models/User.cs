@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace CycleShopAPI.Models
 {
@@ -14,6 +14,6 @@ namespace CycleShopAPI.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? DeletedAt { get; set; }
-        public string? ImageUrl { get; set; }
     }
 }
+
