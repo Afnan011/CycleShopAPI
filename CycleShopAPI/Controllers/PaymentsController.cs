@@ -107,5 +107,43 @@ namespace CycleShopAPI.Controllers
             var total = await _paymentService.GetTotalPaymentsForPeriodAsync(startDate, endDate);
             return Ok(total);
         }
+
+        [HttpPost("razorpay/create-order")]
+        public async Task<ActionResult<RazorpayCreateOrderResponse>> CreateRazorpayOrder(RazorpayCreateOrderRequest request)
+        {
+            try
+            {
+                var response = await _paymentService.CreateRazorpayOrderAsync(request);
+                return Ok(response);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while creating the Razorpay order: {ex.Message}");
+            }
+        }
+
+        [HttpPost("razorpay/verify-payment")]
+        public async Task<ActionResult<RazorpayVerifyPaymentResponse>> VerifyRazorpayPayment(RazorpayVerifyPaymentRequest request)
+        {
+            try
+            {
+                var response = await _paymentService.VerifyRazorpayPaymentAsync(request);
+                
+                if (response.IsAuthentic)
+                {
+                    return Ok(response);
+                }
+                
+                return BadRequest(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while verifying the Razorpay payment: {ex.Message}");
+            }
+        }
     }
 }

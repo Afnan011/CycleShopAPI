@@ -72,7 +72,7 @@ namespace CycleShopAPI.Controllers
                 {
                     CustomerId = request.CustomerId,
                     EmployeeId = request.EmployeeId,
-                    ShippingAddressId = customer.ShippingAddressId,
+                    ShippingAddressId = request.ShippingAddressId ?? customer.ShippingAddressId,
                     Discount = request.Discount ?? 0,
                     Notes = request.Notes ?? string.Empty,
                 };

@@ -1,4 +1,8 @@
 using CycleShopAPI.Models;
+using CycleShopAPI.Models.DTOs;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CycleShopAPI.Services
 {
@@ -11,5 +15,9 @@ namespace CycleShopAPI.Services
         Task<bool> RefundPaymentAsync(Guid paymentId, string reason);
         Task<IEnumerable<Payment>> GetPaymentsByDateRangeAsync(DateTime startDate, DateTime endDate);
         Task<decimal> GetTotalPaymentsForPeriodAsync(DateTime startDate, DateTime endDate);
+        
+        // Razorpay-specific methods
+        Task<RazorpayCreateOrderResponse> CreateRazorpayOrderAsync(RazorpayCreateOrderRequest request);
+        Task<RazorpayVerifyPaymentResponse> VerifyRazorpayPaymentAsync(RazorpayVerifyPaymentRequest request);
     }
 }

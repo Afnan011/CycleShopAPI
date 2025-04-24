@@ -7,5 +7,6 @@
         public decimal? Discount { get; set; } = 0;
         public string? Notes { get; set; }
         public List<OrderItemDTO> Items { get; set; } = new List<OrderItemDTO>();
+        public Guid? ShippingAddressId { get; set; }
     }
 }

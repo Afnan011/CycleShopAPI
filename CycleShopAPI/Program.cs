@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using CycleShopAPI.Data;
+using CycleShopAPI.Models.Settings;
 using CycleShopAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -59,6 +60,10 @@ namespace CycleShopAPI
             // Register DbContext with PostgreSQL
             builder.Services.AddDbContext<CycleShopContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("DevConnection")));
+
+            // Configure settings
+            builder.Services.Configure<RazorpaySettings>(
+                builder.Configuration.GetSection("Razorpay"));
 
             // Register services
             builder.Services.AddScoped<IUserService, UserService>();
