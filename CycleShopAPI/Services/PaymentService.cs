@@ -218,7 +218,7 @@ namespace CycleShopAPI.Services
                 {
                     { "amount", Convert.ToInt32(amountInPaise) },
                     { "currency", request.Currency },
-                    { "receipt", $"receipt_{request.OrderId}" },
+                    { "receipt", $"receipt_{request.OrderId.ToString().Substring(0, Math.Min(request.OrderId.ToString().Length, 30))}" },
                     { "payment_capture", 1 } // Auto-capture
                 };
 
@@ -249,13 +249,13 @@ namespace CycleShopAPI.Services
         {
             try
             {
-                // Verify signature
                 string calculatedSignature = CalculateRazorpaySignature(
                     request.RazorpayOrderId,
                     request.RazorpayPaymentId,
                     _razorpaySettings.KeySecret);
 
-                bool isSignatureValid = calculatedSignature == request.RazorpaySignature;
+                bool isSignatureValid = string.Equals(calculatedSignature, request.RazorpaySignature, StringComparison.OrdinalIgnoreCase);
+
 
                 if (!isSignatureValid)
                 {
