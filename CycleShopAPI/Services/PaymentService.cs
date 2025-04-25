@@ -36,10 +36,27 @@ namespace CycleShopAPI.Services
 
         public async Task<IEnumerable<Models.Payment>> GetPaymentsByOrderIdAsync(Guid orderId)
         {
-            return await _context.Payments
+            var res = await _context.Payments
                 .Include(p => p.Order)
                 .Where(p => p.OrderId == orderId)
+                .Select(p => new Models.Payment
+                {
+                    PaymentId = p.PaymentId,
+                    OrderId = p.OrderId,
+                    Amount = p.Amount,
+                    PaymentType = p.PaymentType,
+                    Status = p.Status,
+                    StripePaymentId = p.StripePaymentId,
+                    ReceiptUrl = p.ReceiptUrl,
+                    CreatedAt = p.CreatedAt,
+                    UpdatedAt = p.UpdatedAt,
+                    RazorpayOrderId = p.RazorpayOrderId ?? string.Empty,
+                    RazorpayPaymentId = p.RazorpayPaymentId ?? string.Empty,
+                    RazorpaySignature = p.RazorpaySignature ?? string.Empty,
+                    Order = p.Order
+                })
                 .ToListAsync();
+            return res;
         }
 
         public async Task<Models.Payment> ProcessPaymentAsync(Models.Payment payment)

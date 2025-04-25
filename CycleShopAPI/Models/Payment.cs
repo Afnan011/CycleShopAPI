@@ -16,10 +16,9 @@ namespace CycleShopAPI.Models
         public PaymentStatus Status { get; set; }
         public string ReceiptUrl { get; set; }
         
-        // New Razorpay-specific fields
-        public string RazorpayOrderId { get; set; }
-        public string RazorpayPaymentId { get; set; }
-        public string RazorpaySignature { get; set; }
+        public string? RazorpayOrderId { get; set; }
+        public string? RazorpayPaymentId { get; set; }
+        public string? RazorpaySignature { get; set; }
         
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;

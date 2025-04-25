@@ -24,21 +24,21 @@ namespace CycleShopAPI.Migrations
                 name: "RazorpayOrderId",
                 table: "Payments",
                 type: "text",
-                nullable: false,
+                nullable: true,
                 defaultValue: "");
 
             migrationBuilder.AddColumn<string>(
                 name: "RazorpayPaymentId",
                 table: "Payments",
                 type: "text",
-                nullable: false,
+                nullable: true,
                 defaultValue: "");
 
             migrationBuilder.AddColumn<string>(
                 name: "RazorpaySignature",
                 table: "Payments",
                 type: "text",
-                nullable: false,
+                nullable: true,
                 defaultValue: "");
         }
 
