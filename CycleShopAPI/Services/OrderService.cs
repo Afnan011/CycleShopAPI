@@ -155,6 +155,12 @@ namespace CycleShopAPI.Services
                 return false;
             }
 
+            if(status == OrderStatus.cancelled)
+            {
+                CancelOrderAsync(orderId).Wait();
+                return true;
+            }
+
             switch (order.Status)
             {
                 case OrderStatus.pending when status == OrderStatus.processing:
@@ -233,6 +239,7 @@ namespace CycleShopAPI.Services
             
             return await _context.SaveChangesAsync() > 0;
         }
+
 
         public async Task<IEnumerable<OrderItem>> GetOrderItemsByOrderIdAsync(Guid orderId)
         {
