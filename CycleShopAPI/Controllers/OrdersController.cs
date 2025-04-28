@@ -161,5 +161,21 @@ namespace CycleShopAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("customer/{customerId}/history")]
+        [Authorize(Roles = "admin,employee")]
+        public async Task<ActionResult<IEnumerable<Order>>> GetCustomerOrderHistory(Guid customerId)
+        {
+            var orders = await _orderService.GetCustomerOrderHistoryAsync(customerId);
+            return Ok(orders);
+        }
+        
+        [HttpGet("employee/{employeeId}/orders")]
+        [Authorize(Roles = "admin,employee")]
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrdersByEmployee(Guid employeeId)
+        {
+            var orders = await _orderService.GetOrdersByEmployeeIdAsync(employeeId);
+            return Ok(orders);
+        }
     }
 }

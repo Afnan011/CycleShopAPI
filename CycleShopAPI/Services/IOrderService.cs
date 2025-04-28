@@ -14,5 +14,7 @@ namespace CycleShopAPI.Services
         Task<bool> DeleteOrderAsync(Guid orderId);
         Task<IEnumerable<OrderItem>> GetOrderItemsByOrderIdAsync(Guid orderId);
         Task<decimal> CalculateOrderTotalAsync(List<OrderItem> items);
+        Task<IEnumerable<Order>> GetCustomerOrderHistoryAsync(Guid customerId);
+        Task<IEnumerable<Order>> GetOrdersByEmployeeIdAsync(Guid employeeId);
     }
 }

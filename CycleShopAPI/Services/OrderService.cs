@@ -267,6 +267,40 @@ namespace CycleShopAPI.Services
             return total;
         }
 
+        public async Task<IEnumerable<Order>> GetCustomerOrderHistoryAsync(Guid customerId)
+        {
+            return await _context.Orders
+                .Include(o => o.Customer)
+                .Include(o => o.Employee)
+                .Include(o => o.ShippingAddress)
+                .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Cycle)
+                        .ThenInclude(c => c.Brand)
+                .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Cycle)
+                        .ThenInclude(c => c.CycleType)
+                .Where(o => o.CustomerId == customerId)
+                .OrderByDescending(o => o.OrderDate)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Order>> GetOrdersByEmployeeIdAsync(Guid employeeId)
+        {
+            return await _context.Orders
+                .Include(o => o.Customer)
+                .Include(o => o.Employee)
+                .Include(o => o.ShippingAddress)
+                .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Cycle)
+                        .ThenInclude(c => c.Brand)
+                .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Cycle)
+                        .ThenInclude(c => c.CycleType)
+                .Where(o => o.EmployeeId == employeeId)
+                .OrderByDescending(o => o.OrderDate)
+                .ToListAsync();
+        }
+
         private string GenerateOrderNumber()
         {
             var now = DateTime.UtcNow;
