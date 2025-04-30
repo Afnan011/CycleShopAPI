@@ -65,7 +65,7 @@ namespace CycleShopAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,employee")]
         public async Task<ActionResult<Cycle>> CreateCycle(CreateCycleDTO createCycleDto)
         {
             var brand = await _brandService.GetBrandByIdAsync(createCycleDto.BrandId);
@@ -94,7 +94,7 @@ namespace CycleShopAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,employee")]
         public async Task<IActionResult> UpdateCycle(Guid id, UpdateCycleDTO updateCycleDto)
         {
 

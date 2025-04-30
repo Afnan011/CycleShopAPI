@@ -69,7 +69,7 @@ namespace CycleShopAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,employee")]
         public async Task<IActionResult> UpdateInventory(Guid id, UpdateInventoryDTO updateInventoryDto)
         {
             if (!ModelState.IsValid)

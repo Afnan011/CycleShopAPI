@@ -44,7 +44,7 @@ namespace CycleShopAPI.Controllers
         }
 
         [HttpGet("by-username/{username}")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,employee")]
         public async Task<ActionResult<User>> GetUserByUsername(string username)
         {
             var user = await _userService.GetUserByUsernameAsync(username);
